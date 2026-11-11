@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>index</title>
+  <title>PRINTS</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="pages.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -14,16 +14,29 @@
   <a href="home.html" class="logo" aria-label="TEE MOON"><img src="tee-moon-logo.png" alt="TEE MOON"></a>
 
   <nav class="navigation">
-    <a href="home.html" class="active">HOME</a>
+    <a href="home.html">HOME</a>
     <a href="bio.html">BIO</a>
     <a href="cv.html">CV</a>
     <a href="artist-statement.html">ARTIST STATEMENT</a>
-    <div class="dd"><a href="portfolio.html">PORTFOLIO <span>⌄</span></a><div class="dd-menu"><a href="series-1.html" data-n="1">SERIES 1</a><a href="series-2.html" data-n="2">SERIES 2</a><a href="series-3.html" data-n="3">SERIES 3</a><a href="series-4.html" data-n="4">SERIES 4</a><a href="series-5.html" data-n="5">SERIES 5</a><a href="series-6.html" data-n="6">SERIES 6</a><a href="series-7.html" data-n="7">SERIES 7</a><a href="series-8.html" data-n="8">SERIES 8</a></div></div>
+    <div class="dd">
+      <a href="portfolio.html">PORTFOLIO <span>⌄</span></a>
+      <div class="dd-menu">
+        <a href="series-1.html" data-n="1">SERIES 1</a>
+        <a href="series-2.html" data-n="2">SERIES 2</a>
+        <a href="series-3.html" data-n="3">SERIES 3</a>
+        <a href="series-4.html" data-n="4">SERIES 4</a>
+        <a href="series-5.html" data-n="5">SERIES 5</a>
+        <a href="series-6.html" data-n="6">SERIES 6</a>
+        <a href="series-7.html" data-n="7">SERIES 7</a>
+        <a href="series-8.html" data-n="8">SERIES 8</a>
+      </div>
+    </div>
     <a href="publications.html">PUBLICATIONS</a>
     <a href="exhibitions.html">EXHIBITIONS</a>
-    <a href="index.html">PRINTS</a>
+    <a href="index.html" class="active">PRINTS</a>
     <a href="art-fashion.html">ART + FASHION</a>
     <a href="contact.html">CONTACT</a>
+
     <div class="language-switch" aria-label="Choose language">
       <button type="button" data-language="en" aria-label="English">
         <img src="flag-us.png" alt="English">
@@ -35,60 +48,24 @@
   </nav>
 </header>
 
-<main class="home-page">
+<main class="prints">
+  <h1>PRINTS</h1>
 
-  <section class="home-hero">
-    <div class="home-hero-image"></div>
-  </section>
+  <div class="prints-gallery">
+    <div class="print-item"></div>
+    <div class="print-item"></div>
+    <div class="print-item"></div>
+  </div>
 
-  <section class="home-bio">
-    <h2>BIO</h2>
-    <div class="home-bio-layout">
-      <div class="home-bio-image"></div>
-      <div class="home-bio-text">
-        <h3></h3>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+  <div class="description">
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+  </div>
 
-        <a href="contact.html" class="home-button">CONTACT</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="home-cv">
-    <h2>CV</h2>
-    <div class="home-cv-layout">
-      <div class="home-cv-text">
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-
-        <a href="cv.html" class="home-button">CV</a>
-      </div>
-      <div class="home-cv-image"></div>
-    </div>
-  </section>
-
-  <section class="home-portfolio">
-    <h2>PORTFOLIO</h2>
-    <div class="home-portfolio-grid">
-      <div class="home-portfolio-item"></div>
-      <div class="home-portfolio-item"></div>
-      <div class="home-portfolio-item"></div>
-      <div class="home-portfolio-item"></div>
-      <div class="home-portfolio-item"></div>
-      <div class="home-portfolio-item"></div>
-    </div>
-    <a href="portfolio.html" class="home-button portfolio-button">VIEW ALL</a>
-  </section>
-
+  <a href="contact.html" class="contact-button">CONTACT ME</a>
 </main>
 
 <footer class="footer">
@@ -121,7 +98,7 @@
 </footer>
 
 <script src="script.js"></script>
-<script src="language.js"></script>
+<script src="language.js?v=2"></script>
 <script src="site-schema.js"></script>
 <script src="supabase-config.js"></script>
 <script src="content.js"></script>

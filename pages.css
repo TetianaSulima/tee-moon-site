@@ -1,0 +1,57 @@
+/* ВЫПАДАЮЩЕЕ МЕНЮ PORTFOLIO */
+.dd{position:relative}
+.dd-menu{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);min-width:240px;padding:10px 0;background:#fff;border:1px solid #000;flex-direction:column;z-index:60}
+.dd:hover .dd-menu{display:flex}
+.dd-menu a{padding:8px 18px;font-size:13px}
+.dd a span{font-size:12px}
+
+/* ARTIST STATEMENT (как BIO) */
+.stmt-page,.pf-page,.series-page,.list-page{width:min(960px,95%);margin:28px auto 55px}
+.stmt-page>h1,.pf-page>h1,.series-page>h1,.list-page>h1{margin:0 auto 28px;text-align:center;font-size:30px;font-weight:400;min-height:36px}
+.stmt-layout{display:grid;grid-template-columns:42% minmax(0,1fr);gap:16px;align-items:start}
+.stmt-photo{width:100%;min-height:620px;background:transparent}
+.stmt-copy{min-height:200px}
+
+/* PORTFOLIO */
+.pf-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+.pf-item{text-align:center}
+.pf-img{width:100%;aspect-ratio:3/4;background:transparent}
+.pf-title{margin:12px 0 6px;font-size:16px;font-weight:400;min-height:24px}
+.pf-more{font-size:13px;color:#000;text-decoration:none}
+.pf-more:hover{opacity:.5}
+
+/* СТРАНИЦА СЕРИИ */
+.series-intro{width:min(760px,100%);margin:0 auto 30px;min-height:70px}
+.series-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.series-img{width:100%;aspect-ratio:3/4;background:transparent}
+
+/* PUBLICATIONS / EXHIBITIONS */
+.list-item{display:grid;grid-template-columns:28% minmax(0,1fr);gap:24px;margin-bottom:34px;align-items:start}
+.list-img{width:100%;aspect-ratio:3/4;background:transparent}
+.list-text{font-size:16px;line-height:1.6;min-height:60px}
+
+@media (max-width:900px){.pf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){
+  .stmt-page,.pf-page,.series-page,.list-page{margin:22px auto 35px}
+  .stmt-page>h1,.pf-page>h1,.series-page>h1,.list-page>h1{font-size:26px;margin-bottom:22px}
+  .stmt-layout{grid-template-columns:1fr;gap:18px}
+  .stmt-photo{min-height:420px;aspect-ratio:2/3}
+  .pf-grid{gap:12px}
+  .series-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .list-item{grid-template-columns:1fr 1fr;gap:12px}
+  .list-text{font-size:12px}
+}
+
+/* ===== ПЛАВНЫЕ АНИМАЦИИ ===== */
+@keyframes tmPage{from{opacity:0}to{opacity:1}}
+@keyframes tmFade{from{opacity:0}to{opacity:1}}
+@keyframes tmZoom{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes tmDrop{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+body{animation:tmPage .6s ease backwards}
+.navigation a,.socials a,.pf-more{transition:opacity .3s ease,border-color .3s ease,color .3s ease}
+.home-button,.contact-button,.footer button,.contact-page-form button{transition:background .3s ease,color .3s ease,opacity .3s ease}
+.footer input,.footer textarea,.contact-page-form input,.contact-page-form textarea{transition:border-color .3s ease}
+.dd:hover .dd-menu{animation:tmDrop .3s ease}
+.tm-reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
+.tm-reveal.tm-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.tm-reveal{opacity:1;transform:none}}

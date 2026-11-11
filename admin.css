@@ -1,0 +1,50 @@
+.adminbar{position:sticky;top:0;z-index:50;background:#111;color:#fff;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:10px 20px;font-size:13px}
+.adminbar>div{display:flex;gap:8px;align-items:center}
+.adminbar button,.adminbar a{background:transparent;border:1px solid #aaa;color:#fff;padding:7px 14px;font-size:12px;cursor:pointer;text-decoration:none}
+.adminbar button:hover,.adminbar a:hover{background:#fff;color:#000}
+#status{color:#7ddc7d}#status.err{color:#ff7b7b}
+.language-switch button[aria-pressed="true"]{outline:2px solid #000;outline-offset:3px}
+.navigation a.off{opacity:.3;pointer-events:none}
+main a{cursor:default}
+.slot-img{position:relative;background-size:cover;background-position:center;background-repeat:no-repeat;outline:2px dashed #bbb;outline-offset:-2px;cursor:pointer}
+.slot-img::after{content:'+ ФОТО';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:.1em;color:#888;text-align:center}
+.slot-img.has::after{content:''}
+.slot-img.has:hover::after{content:'ЗАМЕНИТЬ';background:rgba(0,0,0,.45);color:#fff}
+.slot-clear{display:none;position:absolute;top:6px;right:6px;z-index:2;width:24px;height:24px;border:0;border-radius:50%;background:#000;color:#fff;cursor:pointer;font-size:12px}
+.slot-img.has:hover .slot-clear{display:block}
+.slot-edit{outline:1px dashed #bbb;outline-offset:2px;white-space:pre-wrap;min-height:1.6em}
+.slot-edit:empty::before{content:'Текст…';color:#aaa}
+.slot-edit:focus{outline:2px solid #000}
+.footer .slot-edit{outline-color:#777}
+.slot-text{width:100%;min-height:70px;font-size:16px;line-height:1.6}
+.cv-text-placeholder .slot-text{min-height:300px}
+
+/* БАННЕРЫ */
+.banner .bn{position:absolute;z-index:3;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer}
+.banner .bn:hover{background:#000}
+.bn-prev,.bn-next{top:50%;transform:translateY(-50%);width:40px;height:56px;font-size:28px}
+.bn-prev{left:8px}.bn-next{right:8px}
+.bn-tools{position:absolute;top:8px;left:8px;z-index:3;display:flex;gap:6px}
+.bn-tools .bn{position:static;padding:9px 14px;font-size:12px}
+.bn-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:8px;z-index:3}
+.bn-dots span{width:10px;height:10px;border-radius:50%;background:#fff;opacity:.6;cursor:pointer;box-shadow:0 0 0 1px #000}
+.bn-dots span.on{background:#000;opacity:1;box-shadow:0 0 0 2px #fff}
+.banner.has:hover::after{content:'';background:none}
+
+/* CV: высота зависит от текста */
+.cv-text-placeholder{min-height:0}
+
+/* ЗАЯВКИ */
+.badge{background:#e33;color:#fff;border-radius:10px;padding:0 7px;font-size:11px;margin-left:4px}
+.badge:empty{display:none}
+.inbox-page{width:min(960px,95%);margin:28px auto 55px}
+.inbox-page>h1{margin:0 auto 28px;text-align:center;font-size:30px;font-weight:400}
+.inb-tools{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:14px}
+.inb-item{border:1px solid #ccc;padding:16px 18px;margin-bottom:12px;font-size:15px;line-height:1.6}
+.inb-item.unread{border-left:4px solid #000;background:#fafafa}
+.inb-head{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#666;margin-bottom:6px}
+.inb-tag{background:#000;color:#fff;padding:2px 8px;font-size:11px;letter-spacing:.05em}
+.inb-msg{white-space:pre-wrap;margin-top:6px}
+.inb-actions{margin-top:10px;display:flex;gap:8px}
+.inbox-page button{background:transparent;border:1px solid #000;color:#000;padding:7px 14px;font-size:12px;cursor:pointer}
+.inbox-page button:hover{background:#000;color:#fff}

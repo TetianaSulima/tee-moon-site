@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADMIN | TEE MOON</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="pages.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="adminbar">
+  <strong>АДМИН-ПАНЕЛЬ</strong>
+  <span id="pageName"></span>
+  <span id="status">Сохранено ✓</span>
+  <div>
+    <button type="button" id="inboxBtn">ЗАЯВКИ <b id="inboxCount" class="badge"></b></button>
+    <button type="button" id="exportBtn">Экспорт</button>
+    <button type="button" id="importBtn">Импорт</button>
+    <button type="button" id="resetBtn">Сбросить всё</button>
+    <button type="button" id="logoutBtn">Выйти</button>
+    <a href="home.html" target="_blank">Открыть сайт ↗</a>
+  </div>
+</div>
+<input type="file" id="importFile" accept="application/json" hidden>
+<input type="file" id="imgInput" accept="image/*" hidden>
+
+<header class="header">
+  <a href="#" class="logo" aria-label="TEE MOON"><img src="tee-moon-logo.png" alt="TEE MOON"></a>
+  <nav class="navigation">
+    <a href="#" data-page="home" class="active">HOME</a>
+    <a href="#" data-page="bio">BIO</a>
+    <a href="#" data-page="cv">CV</a>
+    <a href="#" data-page="artist">ARTIST STATEMENT</a>
+    <div class="dd"><a href="#" data-page="portfolio">PORTFOLIO <span>⌄</span></a><div class="dd-menu"><a href="#" data-page="s1" data-n="1">SERIES 1</a><a href="#" data-page="s2" data-n="2">SERIES 2</a><a href="#" data-page="s3" data-n="3">SERIES 3</a><a href="#" data-page="s4" data-n="4">SERIES 4</a><a href="#" data-page="s5" data-n="5">SERIES 5</a><a href="#" data-page="s6" data-n="6">SERIES 6</a><a href="#" data-page="s7" data-n="7">SERIES 7</a><a href="#" data-page="s8" data-n="8">SERIES 8</a></div></div>
+    <a href="#" data-page="pub">PUBLICATIONS</a>
+    <a href="#" data-page="exh">EXHIBITIONS</a>
+    <a href="#" data-page="prints">PRINTS</a>
+    <a href="#" data-page="art">ART + FASHION</a>
+    <a href="#" data-page="contact">CONTACT</a>
+    <div class="language-switch" aria-label="Язык редактируемого текста">
+      <button type="button" data-language="en" aria-label="English"><img src="flag-us.png" alt="English"></button>
+      <button type="button" data-language="uk" aria-label="Українська"><img src="flag-ua.png" alt="Українська"></button>
+    </div>
+  </nav>
+</header>
+
+<main></main>
+
+<footer class="footer">
+  <div class="follow">
+    <h2>FOLLOW ME</h2>
+    <div class="socials">
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-solid fa-at"></i></a>
+    </div>
+  </div>
+  <div class="footer-content">
+    <div class="subscribe">
+      <h3>SUBSCRIBE TO OUR EMAIL</h3>
+      <form id="subscribeForm">
+        <input type="email" placeholder="Email">
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </div>
+    <div class="contact-form">
+      <p class="contact-description"></p>
+      <form id="contactForm">
+        <input type="text" placeholder="Name">
+        <input type="email" placeholder="Email">
+        <input type="tel" placeholder="Phone number">
+        <textarea placeholder="Message"></textarea>
+        <button type="submit">SEND</button>
+      </form>
+    </div>
+  </div>
+  <div class="copyright">© 2026 TEE MOON</div>
+</footer>
+
+<script src="site-schema.js"></script>
+<script src="supabase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
