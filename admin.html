@@ -13,16 +13,28 @@
 <div class="adminbar">
   <strong>АДМИН-ПАНЕЛЬ</strong>
   <span id="pageName"></span>
-  <span id="status">Сохранено ✓</span>
+  <span id="status">Загрузка контента…</span>
   <div>
-    <button type="button" id="inboxBtn">ЗАЯВКИ <b id="inboxCount" class="badge"></b></button>
+    <button type="button" id="publishBtn" class="publish-btn">ОПУБЛИКОВАТЬ НА GITHUB</button>
     <button type="button" id="exportBtn">Экспорт</button>
     <button type="button" id="importBtn">Импорт</button>
-    <button type="button" id="resetBtn">Сбросить всё</button>
-    <button type="button" id="logoutBtn">Выйти</button>
+    <button type="button" id="resetBtn">Вернуть опубликованное</button>
     <a href="home.html" target="_blank">Открыть сайт ↗</a>
   </div>
 </div>
+<div class="admin-info">Изменения сохраняются как <strong>черновик только в этом браузере</strong>. На сайте они появятся после «Опубликовать на GitHub». <a href="https://github.com/TetianaSulima/tee-moon-site" target="_blank" rel="noopener noreferrer">Репозиторий</a></div>
+<dialog id="publishDialog" aria-labelledby="publishTitle" class="publish-dialog">
+  <form id="publishForm">
+    <h2 id="publishTitle">Опубликовать на teemoon.art</h2>
+    <p>Вставьте временный <strong>Fine-grained personal access token</strong> GitHub с доступом только к репозиторию <code>TetianaSulima/tee-moon-site</code> и разрешением <strong>Contents: Read and write</strong>.</p>
+    <p>Токен передаётся только в GitHub API по HTTPS, не сохраняется ни на сайте, ни в браузере. Используйте короткий срок действия и никогда не присылайте токен в чат.</p>
+    <label for="publishToken">GitHub token</label>
+    <input id="publishToken" type="password" autocomplete="off" spellcheck="false" required placeholder="github_pat_…">
+    <p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Создать токен GitHub</a></p>
+    <p id="publishProgress" role="status" aria-live="polite"></p>
+    <div class="publish-actions"><button type="button" id="publishCancel">Отмена</button><button type="submit" id="publishConfirm">Опубликовать</button></div>
+  </form>
+</dialog>
 <input type="file" id="importFile" accept="application/json" hidden>
 <input type="file" id="imgInput" accept="image/*" hidden>
 
@@ -80,7 +92,6 @@
 </footer>
 
 <script src="site-schema.js"></script>
-<script src="supabase-config.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

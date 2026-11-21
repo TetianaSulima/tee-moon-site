@@ -165,8 +165,8 @@
       D = data;
     } catch (error) {
       console.error('Не удалось загрузить опубликованный content.json:', error);
-      // Только запасной вариант. Данные localStorage не видны другим посетителям.
-      D = typeof TM_load === 'function' ? TM_load() : {};
+      // Никогда не подставляем черновик браузера в публичный сайт.
+      D = {};
     }
     hero();
     apply(curLang());

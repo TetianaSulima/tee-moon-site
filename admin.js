@@ -1,28 +1,4 @@
 (() => {
-  const SB = window.TM_SB || {};
-  const sess = () => { try { return JSON.parse(localStorage.getItem('tmSb')); } catch (e) { return null; } };
-  async function sbAuth(grant, body) {
-    const r = await fetch(SB.url + '/auth/v1/token?grant_type=' + grant, { method: 'POST', headers: { apikey: SB.key, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const d = await r.json();
-    if (!r.ok) throw new Error(d.error_description || d.msg || 'auth');
-    localStorage.setItem('tmSb', JSON.stringify({ access_token: d.access_token, refresh_token: d.refresh_token, expires_at: Math.floor(Date.now() / 1000) + d.expires_in }));
-    return d;
-  }
-  if (!sess()) {
-    const ok = SB.url && !/YOUR/.test(SB.url);
-    const inp = 'padding:12px;border:1px solid #000;font-size:15px';
-    document.body.innerHTML = '<form id="lg" style="max-width:320px;margin:120px auto;font-family:Arial;display:flex;flex-direction:column;gap:10px"><h2 style="font-weight:400;text-align:center">ADMIN</h2>' +
-      (ok ? '<input id="lgE" type="email" placeholder="Email" required style="' + inp + '"><input id="lgP" type="password" placeholder="Пароль" required style="' + inp + '"><button style="padding:12px;background:#000;color:#fff;border:0;cursor:pointer">ВОЙТИ</button>'
-          : '<p style="color:#c00">Заполните supabase-config.js (Project URL и ключ).</p>') + '<div id="lgM" style="color:#c00;font-size:13px"></div></form>';
-    const f = document.getElementById('lg');
-    if (ok) f.onsubmit = e => {
-      e.preventDefault();
-      sbAuth('password', { email: document.getElementById('lgE').value.trim(), password: document.getElementById('lgP').value })
-        .then(() => location.reload()).catch(() => { document.getElementById('lgM').textContent = 'Неверный email или пароль'; });
-    };
-    return;
-  }
-
   const rep = (h, n) => h.repeat(n);
   const T = {
     home: `<main class="home-page">
@@ -49,75 +25,150 @@
   const NAMES = { home: 'HOME', bio: 'BIO', cv: 'CV', prints: 'PRINTS', art: 'ART + FASHION', contact: 'CONTACT' };
 
   Object.assign(T, {"artist": "<main class=\"stmt-page\">\n  <h1>ARTIST STATEMENT</h1>\n  <section class=\"stmt-layout\">\n    <div class=\"stmt-photo\" aria-label=\"Photo placeholder\"></div>\n    <div class=\"stmt-copy\"></div>\n  </section>\n</main>", "portfolio": "<main class=\"pf-page\">\n  <h1>PORTFOLIO</h1>\n  <div class=\"pf-grid\">\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-1.html\" class=\"pf-more\" data-n=\"1\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-2.html\" class=\"pf-more\" data-n=\"2\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-3.html\" class=\"pf-more\" data-n=\"3\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-4.html\" class=\"pf-more\" data-n=\"4\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-5.html\" class=\"pf-more\" data-n=\"5\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-6.html\" class=\"pf-more\" data-n=\"6\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-7.html\" class=\"pf-more\" data-n=\"7\">READ MORE »</a></div>\n    <div class=\"pf-item\"><div class=\"pf-img\"></div><h3 class=\"pf-title\"></h3><a href=\"series-8.html\" class=\"pf-more\" data-n=\"8\">READ MORE »</a></div>\n  </div>\n</main>", "pub": "<main class=\"list-page pub-page\">\n  <h1>PUBLICATIONS</h1>\n  <div class=\"list-rows\">\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n  </div>\n</main>", "exh": "<main class=\"list-page exh-page\">\n  <h1>EXHIBITIONS</h1>\n  <div class=\"list-rows\">\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n    <div class=\"list-item\"><div class=\"list-img\"></div><div class=\"list-text\"></div></div>\n  </div>\n</main>", "s1": "<main class=\"series-page\" data-series=\"1\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s2": "<main class=\"series-page\" data-series=\"2\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s3": "<main class=\"series-page\" data-series=\"3\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s4": "<main class=\"series-page\" data-series=\"4\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s5": "<main class=\"series-page\" data-series=\"5\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s6": "<main class=\"series-page\" data-series=\"6\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s7": "<main class=\"series-page\" data-series=\"7\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>", "s8": "<main class=\"series-page\" data-series=\"8\">\n  <h1></h1>\n  <div class=\"series-intro\"></div>\n  <div class=\"series-gallery\">\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n    <div class=\"series-img\"></div>\n  </div>\n</main>"});
-  T.inbox = '<main class="inbox-page"><h1>ЗАЯВКИ</h1><div id="inboxList"></div></main>';
-  NAMES.inbox = 'ЗАЯВКИ';
   Object.assign(NAMES, {"artist": "ARTIST STATEMENT", "portfolio": "PORTFOLIO", "pub": "PUBLICATIONS", "exh": "EXHIBITIONS", "s1": "PORTFOLIO · SERIES 1", "s2": "PORTFOLIO · SERIES 2", "s3": "PORTFOLIO · SERIES 3", "s4": "PORTFOLIO · SERIES 4", "s5": "PORTFOLIO · SERIES 5", "s6": "PORTFOLIO · SERIES 6", "s7": "PORTFOLIO · SERIES 7", "s8": "PORTFOLIO · SERIES 8"});
 
-  let page = 'home', lang = 'en', D = TM_load(), timer;
+  // Published data is loaded from content.json. Draft is separate and private to this browser.
+  const GITHUB_OWNER = 'TetianaSulima', GITHUB_REPO = 'tee-moon-site', GITHUB_BRANCH = 'main';
+  const GH_BASE = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+  let page = 'home', lang = 'en', D = {}, PUBLISHED = {}, baselineSha = '', timer, publishing = false;
   const $ = s => document.querySelector(s);
   const status = $('#status'), imgInput = $('#imgInput');
-
+  const publishBtn = $('#publishBtn'), dialog = $('#publishDialog'), progress = $('#publishProgress');
+  const clone = value => JSON.parse(JSON.stringify(value));
+  function setStatus(message, error = false) {
+    status.textContent = message; status.classList.toggle('err', error);
+  }
   function save() {
-    try { localStorage.setItem(TM_KEY, JSON.stringify(D)); status.textContent = 'Сохранено ✓'; status.classList.remove('err'); }
-    catch (e) { status.textContent = 'Нет места в памяти браузера — уменьшите число/размер фото'; status.classList.add('err'); }
-  }
-
-  // ===== ЗАЯВКИ =====
-  const logout = () => { localStorage.removeItem('tmSb'); location.reload(); };
-  async function api(path, opt = {}) {
-    let s = sess();
-    if (!s) { logout(); throw new Error('auth'); }
-    if (s.expires_at - 60 < Date.now() / 1000) {
-      try { s = await sbAuth('refresh_token', { refresh_token: s.refresh_token }); } catch (e) { logout(); throw e; }
+    try {
+      localStorage.setItem(TM_KEY, JSON.stringify(D));
+      setStatus('Черновик сохранён в браузере ✓ · НЕ опубликован');
+    } catch (e) {
+      setStatus('Мало места в браузере. Экспортируйте JSON и уменьшите фото.', true);
     }
-    const r = await fetch(SB.url + '/rest/v1' + path, Object.assign({}, opt, { headers: Object.assign({ apikey: SB.key, Authorization: 'Bearer ' + s.access_token, 'Content-Type': 'application/json' }, opt.headers || {}) }));
-    if (r.status === 401) { logout(); throw new Error('auth'); }
-    if (!r.ok) throw new Error(r.status);
-    return r.status === 204 ? null : r.json();
   }
-  const LIST = '/messages?select=*&order=created_at.desc&limit=1000';
-  const badge = list => { const n = list.filter(x => !x.read).length; $('#inboxCount').textContent = n ? n : ''; };
-  const refreshBadge = () => api(LIST).then(badge).catch(() => {});
-  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
-  function csv(list) {
-    const q = v => { v = String(v == null ? '' : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };
-    const rows = [['Дата', 'Тип', 'Имя', 'Email', 'Телефон', 'Сообщение']].concat(list.map(x =>
-      [new Date(x.created_at).toLocaleString('ru-RU'), x.type === 'subscribe' ? 'Подписка' : 'Сообщение', x.name, x.email, x.phone, x.message]));
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob(['\ufeff' + rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' }));
-    a.download = 'tee-moon-zayavki.csv'; a.click();
+  // Exact Git blob checksum of public content.json; prevents overwriting someone else's commit.
+  async function blobSHA(utf8Bytes) {
+    const header = new TextEncoder().encode(`blob ${utf8Bytes.byteLength}\0`);
+    const bytes = new Uint8Array(header.byteLength + utf8Bytes.byteLength);
+    bytes.set(header); bytes.set(utf8Bytes, header.byteLength);
+    const sum = await crypto.subtle.digest('SHA-1', bytes);
+    return [...new Uint8Array(sum)].map(n => n.toString(16).padStart(2, '0')).join('');
   }
-  async function loadInbox() {
-    const box = $('#inboxList');
-    if (!box) return;
-    let list;
-    try { list = await api(LIST); }
-    catch (e) { box.textContent = 'Не удалось загрузить заявки. Проверьте supabase-config.js и что supabase.sql выполнен.'; return; }
-    badge(list);
-    box.textContent = '';
-    const tools = el('div', 'inb-tools');
-    tools.appendChild(el('span', '', 'Всего: ' + list.length + ' · новых: ' + list.filter(x => !x.read).length));
-    const b = el('button', '', 'Скачать CSV'); b.type = 'button'; b.onclick = () => csv(list); tools.appendChild(b);
-    box.appendChild(tools);
-    if (!list.length) box.appendChild(el('p', 'inb-empty', 'Заявок пока нет.'));
-    list.forEach(x => {
-      const it = el('div', 'inb-item' + (x.read ? '' : ' unread'));
-      const head = el('div', 'inb-head');
-      head.appendChild(el('span', 'inb-tag', x.type === 'subscribe' ? 'ПОДПИСКА' : 'СООБЩЕНИЕ'));
-      head.appendChild(el('span', '', new Date(x.created_at).toLocaleString('ru-RU')));
-      it.appendChild(head);
-      if (x.name) it.appendChild(el('div', '', 'Имя: ' + x.name));
-      const mail = el('div', '', 'Email: '); const ma = el('a', '', x.email); ma.href = 'mailto:' + x.email; mail.appendChild(ma); it.appendChild(mail);
-      if (x.phone) it.appendChild(el('div', '', 'Телефон: ' + x.phone));
-      if (x.message) it.appendChild(el('div', 'inb-msg', x.message));
-      const act = el('div', 'inb-actions');
-      if (!x.read) { const r = el('button', '', 'Прочитано'); r.type = 'button'; r.onclick = () => api('/messages?id=eq.' + x.id, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ read: true }) }).then(loadInbox); act.appendChild(r); }
-      const d = el('button', '', 'Удалить'); d.type = 'button';
-      d.onclick = () => { if (confirm('Удалить эту заявку?')) api('/messages?id=eq.' + x.id, { method: 'DELETE', headers: { Prefer: 'return=minimal' } }).then(loadInbox); };
-      act.appendChild(d); it.appendChild(act); box.appendChild(it);
+  async function loadPublished() {
+    const r = await fetch('./content.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error('content.json: HTTP ' + r.status);
+    const raw = await r.arrayBuffer();
+    const obj = JSON.parse(new TextDecoder().decode(raw));
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new Error('invalid content.json');
+    baselineSha = await blobSHA(new Uint8Array(raw));
+    PUBLISHED = obj;
+  }
+  async function boot() {
+    try {
+      await loadPublished();
+      const draft = TM_load();
+      // Old local edits may contain images not published yet; always offer to keep them.
+      if (Object.keys(draft).length && JSON.stringify(draft) !== JSON.stringify(PUBLISHED)) {
+        const useDraft = confirm('В этом браузере найден черновик.\n\nОК = продолжить черновик (не потерять изменения).\nОтмена = открыть опубликованную версию сайта.\n\nПеред отказом от черновика рекомендуем сделать Экспорт.');
+        D = useDraft ? draft : clone(PUBLISHED);
+        if (!useDraft) save();
+      } else D = clone(PUBLISHED);
+      setStatus('Загружено · изменения станут видны после публикации');
+    } catch (e) {
+      console.error(e);
+      D = TM_load();
+      baselineSha = '';
+      setStatus('Не удалось загрузить опубликованную версию. Черновик доступен, публикация отключена.', true);
+    }
+    render();
+  }
+  // Strict GitHub API target and short-lived token, never stored in localStorage or source code.
+  async function gh(path, token, init = {}) {
+    const response = await fetch(GH_BASE + path, {
+      ...init,
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(init.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(init.headers || {})
+      }
     });
+    let data;
+    try { data = await response.json(); } catch (_) { data = {}; }
+    if (!response.ok) {
+      const message = data.message || `HTTP ${response.status}`;
+      throw new Error(`GitHub ${response.status}: ${message}`);
+    }
+    return data;
   }
-
+  const bytesToHex = arr => Array.from(arr, b => b.toString(16).padStart(2,'0')).join('');
+  async function sha256(binary) {
+    return bytesToHex(new Uint8Array(await crypto.subtle.digest('SHA-256', binary)));
+  }
+  function allImageValues(data) {
+    const v = [];
+    const walk = x => { if (typeof x === 'string') v.push(x); else if (Array.isArray(x)) x.forEach(walk); };
+    Object.values(data).forEach(walk);
+    return v;
+  }
+  async function prepareContent() {
+    const replacements = new Map();
+    const uploads = new Map();
+    const existingPaths = new Set(allImageValues(PUBLISHED).filter(x => /^images\/content\/[a-f0-9]{24}\.(jpg|png|webp)$/.test(x)));
+    const unique = [...new Set(allImageValues(D).filter(v => v.startsWith('data:image/')))];
+    for (const value of unique) {
+      const m = value.match(/^data:image\/(jpeg|jpg|png|webp);base64,([a-zA-Z0-9+/=]+)$/);
+      if (!m) throw new Error('Неподдерживаемый формат фотографии. Используйте JPEG, PNG или WEBP.');
+      const ext = m[1] === 'jpeg' ? 'jpg' : m[1];
+      const decoded = atob(m[2]);
+      const bytes = Uint8Array.from(decoded, c => c.charCodeAt(0));
+      const name = (await sha256(bytes)).slice(0,24) + '.' + ext;
+      const path = 'images/content/' + name;
+      replacements.set(value, path);
+      if (!existingPaths.has(path) && !uploads.has(path)) uploads.set(path, m[2]);
+    }
+    const convert = v => Array.isArray(v) ? v.map(convert) : (typeof v === 'string' ? replacements.get(v) || v : v);
+    return { content: Object.fromEntries(Object.entries(D).map(([k,v]) => [k, convert(v)])), uploads };
+  }
+  async function publish(token) {
+    if (!baselineSha) throw new Error('Не загружен актуальный content.json. Откройте админку через HTTPS.');
+    if (!navigator.onLine) throw new Error('Нет соединения с интернетом.');
+    progress.classList.remove('err');
+    progress.textContent = 'Проверка актуальной версии…';
+    const r = await gh(`/contents/content.json?ref=${GITHUB_BRANCH}`, token);
+    if (r.sha !== baselineSha) throw new Error('Файл content.json изменился в GitHub после открытия админки. Черновик сохранён. Сделайте Экспорт, обновите страницу и перенесите свои изменения.');
+    const branch = await gh(`/git/ref/heads/${GITHUB_BRANCH}`, token);
+    const headSha = branch.object.sha;
+    const head = await gh(`/git/commits/${headSha}`, token);
+    const { content, uploads } = await prepareContent();
+    const tree = [];
+    let n = 0;
+    for (const [path, bytes] of uploads) {
+      progress.textContent = `Отправка новых фотографий: ${++n} из ${uploads.size}…`;
+      const blob = await gh('/git/blobs', token, { method:'POST', body:JSON.stringify({content:bytes,encoding:'base64'}) });
+      tree.push({path,mode:'100644',type:'blob',sha:blob.sha});
+    }
+    progress.textContent = 'Сохранение текстов и ссылок на фотографии…';
+    const contentString = JSON.stringify(content, null, 2) + '\n';
+    const contentBlob = await gh('/git/blobs', token, { method:'POST', body:JSON.stringify({content:contentString,encoding:'utf-8'}) });
+    tree.push({path:'content.json',mode:'100644',type:'blob',sha:contentBlob.sha});
+    const newTree = await gh('/git/trees', token, { method:'POST', body:JSON.stringify({base_tree:head.tree.sha,tree}) });
+    const commit = await gh('/git/commits', token, { method:'POST', body:JSON.stringify({message:'Publish Tee Moon portfolio content',tree:newTree.sha,parents:[headSha]}) });
+    progress.textContent = 'Активация новой версии GitHub Pages…';
+    await gh(`/git/refs/heads/${GITHUB_BRANCH}`, token, {method:'PATCH',body:JSON.stringify({sha:commit.sha,force:false})});
+    PUBLISHED = clone(content);
+    D = clone(content);
+    baselineSha = contentBlob.sha;
+    try { localStorage.setItem(TM_KEY, JSON.stringify(D)); } catch (_) {}
+    setStatus('Отправлено в GitHub ✓ · публикация Pages может занять несколько минут');
+    return { images:uploads.size, commit:commit.sha };
+  }
+  function showPublishError(error) {
+    progress.classList.add('err');
+    progress.textContent = error.message || String(error);
+    setStatus('Публикация не удалась · черновик сохранён', true);
+  }
   function fillNav() {
     document.querySelectorAll('.dd-menu a[data-n]').forEach(x => {
       const k = 'portfolio.title.' + x.dataset.n + '|';
@@ -223,7 +274,6 @@
     document.querySelectorAll('.language-switch button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.language === lang)));
     TM_SLOTS.filter(s => s.k.startsWith(page + '.') || s.k.startsWith('global.') || s.pg === page).forEach(bind);
     fillNav();
-    if (page === 'inbox') loadInbox();
     scrollTo(0, 0);
   }
 
@@ -244,10 +294,42 @@
     r.onload = () => { try { D = JSON.parse(r.result); save(); render(); } catch (err) { alert('Неверный файл'); } };
     r.readAsText(f); e.target.value = '';
   };
-  $('#resetBtn').onclick = () => { if (confirm('Удалить все фото и тексты?')) { D = {}; save(); render(); } };
+  $('#resetBtn').onclick = () => { if (confirm('Заменить текущий черновик опубликованной версией? Несохранённые на сайте изменения исчезнут из браузера. Рекомендуем сначала сделать Экспорт.')) { D = clone(PUBLISHED); save(); render(); } };
 
-  $('#logoutBtn').onclick = logout;
-  $('#inboxBtn').onclick = () => { page = 'inbox'; render(); };
-  refreshBadge(); setInterval(refreshBadge, 30000);
-  render();
+  publishBtn.onclick = () => {
+    if (publishing) return;
+    progress.textContent = '';
+    progress.classList.remove('err');
+    $('#publishToken').value = '';
+    dialog.showModal();
+  };
+  $('#publishCancel').onclick = () => { if (!publishing) dialog.close(); };
+  $('#publishForm').onsubmit = async e => {
+    e.preventDefault();
+    if (publishing) return;
+    // Only this JS call stack holds the token; never persist it.
+    const token = $('#publishToken').value.trim();
+    $('#publishToken').value = '';
+    if (!token) return showPublishError(new Error('Введите GitHub token.'));
+    clearTimeout(timer); // flush local changes before sending
+    save();
+    publishing = true;
+    $('#publishConfirm').disabled = true;
+    $('#publishCancel').disabled = true;
+    publishBtn.disabled = true;
+    try {
+      const result = await publish(token);
+      progress.textContent = 'Успешно отправлено в GitHub. Новая версия появится после сборки GitHub Pages.';
+      render();
+    } catch (err) {
+      console.error('GitHub publication:', err.message);
+      showPublishError(err);
+    } finally {
+      publishing = false;
+      $('#publishConfirm').disabled = false;
+      $('#publishCancel').disabled = false;
+      publishBtn.disabled = false;
+    }
+  };
+  boot();
 })();
