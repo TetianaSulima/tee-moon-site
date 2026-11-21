@@ -1,6 +1,6 @@
 /* Подключается на страницах сайта: подставляет фото и текст из админки */
 (() => {
-  const D = TM_load();
+  let D = {};  // Публичные данные загружаются из content.json
   const st = document.createElement('style');
   st.textContent = '.slot-text{width:100%;white-space:pre-line;font-size:16px;line-height:1.6}' +
     '.tm-slider{position:relative}.tm-wrap{position:absolute;inset:0;overflow:hidden}' +
@@ -154,11 +154,27 @@
       });
     });
   }
-  hero();
-  apply(curLang());
-  forms();
-  lightbox();
-  animate();
-  document.querySelectorAll('.language-switch button').forEach(b =>
-    b.addEventListener('click', () => apply(b.dataset.language)));
+  async function start() {
+    try {
+      const response = await fetch('./content.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('content.json: HTTP ' + response.status);
+      const data = await response.json();
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        throw new Error('Неверный формат content.json');
+      }
+      D = data;
+    } catch (error) {
+      console.error('Не удалось загрузить опубликованный content.json:', error);
+      // Только запасной вариант. Данные localStorage не видны другим посетителям.
+      D = typeof TM_load === 'function' ? TM_load() : {};
+    }
+    hero();
+    apply(curLang());
+    forms();
+    lightbox();
+    animate();
+    document.querySelectorAll('.language-switch button').forEach(b =>
+      b.addEventListener('click', () => apply(b.dataset.language)));
+  }
+  start();
 })();
