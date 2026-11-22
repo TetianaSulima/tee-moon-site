@@ -873,3 +873,106 @@ body {
     min-height: 1800px;
   }
 }
+
+
+/* TEE MOON: light footer and integrated MailerLite form */
+.footer {
+  background: #faf8f2;
+  color: #202020;
+  border-top: 1px solid #ded9ce;
+  min-height: 0;
+  padding: 48px 40px 28px;
+}
+.footer .follow h2, .footer .subscribe h3 { color: #202020; font-weight: 400; }
+.footer .socials a, .footer a { color: #202020; }
+.footer .footer-content { align-items: start; gap: 44px; margin-top: 35px; }
+.footer .subscribe { padding-top: 0; }
+.footer .subscribe input, .footer .contact-form input, .footer .contact-form textarea {
+  background: #fff;
+  color: #222;
+  border: 1px solid #aaa59e;
+  border-radius: 2px;
+}
+.footer .subscribe input::placeholder, .footer .contact-form input::placeholder,
+.footer .contact-form textarea::placeholder { color: #777; }
+.footer .subscribe button, .footer .contact-form button {
+  background: #222;
+  border: 1px solid #222;
+  border-radius: 2px;
+  color: #fff;
+}
+.footer .subscribe button:hover, .footer .contact-form button:hover {
+  background: #faf8f2;
+  color: #222;
+}
+.footer .subscribe input:focus-visible, .footer .contact-form input:focus-visible,
+.footer .contact-form textarea:focus-visible, .footer button:focus-visible {
+  outline: 2px solid #555;
+  outline-offset: 2px;
+}
+.footer .copyright { color: #777; font-size: 12px; }
+
+/* Official MailerLite form, visually integrated without its own grey card */
+.footer .subscribe #mlb2-48877838,
+.footer .subscribe #mlb2-48877838 .ml-form-embedWrapper,
+.footer .subscribe #mlb2-48877838 .ml-form-align-center {
+  display: block;
+  max-width: 430px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-embedBody,
+.footer .subscribe #mlb2-48877838 .ml-form-successBody { padding: 0; margin: 0; }
+.footer .subscribe #mlb2-48877838 .ml-form-embedContent p {
+  margin: 0 0 18px;
+  font: 14px/1.6 Arial, Helvetica, sans-serif;
+  color: #555;
+  text-align: center;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-fieldRow { margin: 0 0 12px; }
+.footer .subscribe #mlb2-48877838 input[type=email] {
+  display: block;
+  height: 50px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 14px;
+  font: 16px Arial, Helvetica, sans-serif;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-recaptcha {
+  display: block;
+  float: none !important;
+  min-height: 76px;
+  margin: 14px 0;
+  text-align: left;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-embedSubmit { margin: 12px 0 0; width: 100%; }
+.footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 12px 18px;
+  font: 14px Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.loading { display: none; }
+.footer .subscribe #mlb2-48877838 .ml-form-successContent h4 {
+  font: 23px/1.3 Arial, Helvetica, sans-serif;
+  margin: 0 0 8px;
+}
+.footer .subscribe #mlb2-48877838 .ml-form-successContent p {
+  font: 14px/1.6 Arial, Helvetica, sans-serif;
+}
+@media(max-width:700px) {
+  .footer { padding: 40px 20px 28px; }
+  .footer .footer-content { gap: 32px; }
+}
+@media(max-width:400px) {
+  .footer .subscribe #mlb2-48877838 .g-recaptcha {
+    transform: scale(.78);
+    transform-origin: left top;
+  }
+}

@@ -134,6 +134,31 @@
       io.observe(el);
     });
   }
+  const MAILERLITE_HTML = "<div class=\"ml-form-embedContainer ml-subscribe-form ml-subscribe-form-48877838\" id=\"mlb2-48877838\">\n<div class=\"ml-form-align-center\">\n<div class=\"ml-form-embedWrapper embedForm\">\n<div class=\"ml-form-embedBody ml-form-embedBodyDefault row-form\">\n<div class=\"ml-form-embedContent\" style=\" \">\n\n<p>Get occasional updates on new work, exhibitions, and available prints.</p>\n</div>\n<form action=\"https://assets.mailerlite.com/jsonp/2815266/forms/204797424757114397/subscribe\" class=\"ml-block-form\" data-code=\"\" method=\"post\" target=\"_blank\">\n<div class=\"ml-form-formContent\">\n<div class=\"ml-form-fieldRow ml-last-item\">\n<div class=\"ml-field-group ml-field-email ml-validate-email ml-validate-required\">\n<!-- input -->\n<input aria-label=\"email\" aria-required=\"true\" autocomplete=\"email\" class=\"form-control\" data-inputmask=\"\" name=\"fields[email]\" placeholder=\"Email\" type=\"email\"/>\n<!-- /input -->\n<!-- textarea -->\n<!-- /textarea -->\n<!-- select -->\n<!-- /select -->\n<!-- checkboxes -->\n<!-- /checkboxes -->\n<!-- radio -->\n<!-- /radio -->\n<!-- countries -->\n<!-- /countries -->\n</div>\n</div>\n</div>\n<!-- Privacy policy -->\n<!-- /Privacy policy -->\n<div class=\"ml-form-recaptcha ml-validate-required\" style=\"float: left;\">\n\n\n<div class=\"g-recaptcha\" data-sitekey=\"6Lf1KHQUAAAAAFNKEX1hdSWCS3mRMv4FlFaNslaD\"></div>\n</div>\n<input name=\"ml-submit\" type=\"hidden\" value=\"1\"/>\n<div class=\"ml-form-embedSubmit\">\n<button class=\"primary\" type=\"submit\">Subscribe</button>\n<button class=\"loading\" disabled=\"disabled\" style=\"display: none;\" type=\"button\">\n<div class=\"ml-form-embedSubmitLoad\"></div>\n<span class=\"sr-only\">Loading...</span>\n</button>\n</div>\n<input name=\"anticsrf\" type=\"hidden\" value=\"true\"/>\n</form>\n</div>\n<div class=\"ml-form-successBody row-success\" style=\"display: none\">\n<div class=\"ml-form-successContent\">\n<h4>Thank you!</h4>\n<p>Thank you for subscribing! Please check your inbox to confirm your subscription.</p>\n</div>\n</div>\n</div>\n</div>\n</div>";
+  function setupNewsletter() {
+    const old = document.getElementById('subscribeForm');
+    if (!old) return;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = MAILERLITE_HTML;
+    old.replaceWith(wrap.firstElementChild);
+    window.ml_webform_success_48877838 = function () {
+      const area = document.getElementById('mlb2-48877838');
+      if (!area) return;
+      const oldContent = area.querySelector('.row-form');
+      const success = area.querySelector('.row-success');
+      if (oldContent) oldContent.style.display = 'none';
+      if (success) success.style.display = 'block';
+    };
+    ['https://www.google.com/recaptcha/api.js',
+     'https://groot.mailerlite.com/js/w/webforms.min.js?v83147fa8ce2d95cb73ece7f28b469519']
+      .forEach(src => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        document.body.appendChild(script);
+      });
+  }
+
   function forms() {
     // Public Formspree form ID is safe to include in browser code.
     // Site's subscription list will be connected to MailerLite separately.
@@ -189,13 +214,7 @@
         }
       });
     });
-    const subscribe = document.getElementById('subscribeForm');
-    if (subscribe) {
-      subscribe.addEventListener('submit', event => {
-        event.preventDefault();
-        showStatus(subscribe, language() ? 'Підписка незабаром буде доступна.' : 'Newsletter signup is coming soon.');
-      });
-    }
+    setupNewsletter();
   }
   async function start() {
     try {
