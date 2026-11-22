@@ -7,6 +7,10 @@
   const translations = {
     'HOME': 'ГОЛОВНА',
     'BIO': 'БІОГРАФІЯ',
+    'ABOUT': 'ПРО МЕНЕ',
+    'BIOGRAPHY': 'БІОГРАФІЯ',
+    'MORE ABOUT': 'БІЛЬШЕ ПРО МЕНЕ',
+    'DOWNLOAD CV': 'ЗАВАНТАЖИТИ CV',
     'CV': 'РЕЗЮМЕ',
     'ARTIST STATEMENT': 'ТВОРЧА ЗАЯВА',
     'PORTFOLIO': 'ПОРТФОЛІО',

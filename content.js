@@ -12,6 +12,44 @@
   document.head.appendChild(st);
   const curLang = () => { try { return localStorage.getItem('teeMoonLanguage') || 'en'; } catch (e) { return 'en'; } };
 
+
+  // Replace old separate BIO, CV and STATEMENT navigation everywhere,
+  // including legacy pages that are deliberately kept for old links.
+  function aboutNavigation() {
+    document.querySelectorAll('.navigation').forEach(nav => {
+      const bio = nav.querySelector('a[href="bio.html"]');
+      if (bio) {
+        bio.setAttribute('href','about.html');
+        bio.textContent = 'ABOUT';
+        bio.classList.remove('active');
+      }
+      nav.querySelectorAll('a[href="cv.html"], a[href="artist-statement.html"]').forEach(a => a.remove());
+    });
+  }
+
+  function aboutVisibility() {
+    if (!document.querySelector('.about-page')) return;
+    const section = document.querySelector('.about-statement');
+    if (!section) return;
+    const l = curLang();
+    const alternative = l === 'uk' ? 'en' : 'uk';
+    const hasText = Boolean(D['artist.text|' + l] || D['artist.text|' + alternative]);
+    const hasPhoto = Boolean(D['artist.photo']);
+    section.hidden = !(hasText || hasPhoto);
+    section.classList.toggle('no-photo', !hasPhoto);
+  }
+
+  async function aboutCvLink() {
+    const link = document.querySelector('.about-cv-download');
+    if (!link) return;
+    // CV has not been finalised. Display a real download link only when
+    // the user later uploads tee-moon-cv.pdf to the repository root.
+    try {
+      const response = await fetch('./tee-moon-cv.pdf', { method: 'HEAD' });
+      link.hidden = !response.ok;
+    } catch (error) { link.hidden = true; }
+  }
+
   function hero() {
     const a = D['home.banners'] || (D['home.hero'] ? [D['home.hero']] : []);
     const el = document.querySelector('.home-hero-image');
@@ -52,6 +90,7 @@
       a.textContent = (D[k + l] || D[k + other] || sub + a.dataset.n).toUpperCase();
     });
     document.querySelectorAll('.pf-more').forEach(a => { a.textContent = l === 'uk' ? 'ДІЗНАТИСЬ БІЛЬШЕ »' : 'READ MORE »'; });
+    aboutVisibility();
   }
   function lightbox() {
     const main = document.querySelector('.series-page[data-series]');
@@ -243,6 +282,8 @@
     setupNewsletter();
   }
   async function start() {
+    aboutNavigation();
+    aboutCvLink();
     setupFooter();
     try {
       const response = await fetch('./content.json', { cache: 'no-store' });

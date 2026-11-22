@@ -1474,3 +1474,90 @@ body {
     flex-direction: column;
   }
 }
+
+
+/* Tee Moon: ABOUT / shared bilingual artist biography and statement */
+.about-page {
+  width: min(980px, 92%);
+  margin: 24px auto 65px;
+}
+.about-page > h1 {
+  text-align: center;
+  font-size: 31px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  margin: 0 0 46px;
+}
+.about-bio {
+  display: grid;
+  grid-template-columns: minmax(0, 39%) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 65px);
+  align-items: start;
+}
+.about-page h2 {
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: .09em;
+  line-height: 1.3;
+  margin: 0 0 21px;
+}
+.about-page .bio-photo-placeholder {
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  background-position: center;
+  background-size: cover;
+}
+.about-bio-main .bio-copy-placeholder {
+  min-height: 0;
+  display: block;
+  font-size: 16px;
+  line-height: 1.75;
+  white-space: pre-line;
+}
+.about-bio-main .slot-text,
+.about-statement .slot-text {
+  font-size: 16px;
+  line-height: 1.75;
+  white-space: pre-line;
+}
+.about-cv-download {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #ba8b34;
+  color: #624917;
+  background: transparent;
+  padding: 12px 18px;
+  margin-top: 28px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-decoration: none;
+  transition: background .2s,color .2s;
+}
+.about-cv-download:not([hidden]):hover {
+  background: #ba8b34;
+  color: #fff;
+}
+.about-page [hidden] { display: none!important; }
+.about-statement {
+  border-top: 1px solid #d7d2c7;
+  margin-top: clamp(40px, 6vw, 76px);
+  padding-top: clamp(26px, 4vw, 45px);
+}
+.about-statement-layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,37%); gap: 40px; }
+.about-statement.no-photo .about-statement-layout { display: block; max-width: 760px; }
+.about-statement .stmt-photo { min-height: 0; aspect-ratio: 3/4; background-position: center; background-size: cover; }
+.about-statement .stmt-copy { min-height: 0; font-size: 16px; line-height: 1.75; }
+.about-cv-note { color: #746f64; font-size: 13px; margin-top: 16px; }
+body:has(.adminbar) .about-statement .stmt-copy { min-height: 150px; }
+body:has(.adminbar) .about-page .bio-copy-placeholder { min-height: 150px; }
+@media (max-width: 700px) {
+ .about-page { width: min(92%, 520px); margin: 20px auto 40px; }
+ .about-page > h1 { font-size: 26px; margin-bottom: 25px; }
+ .about-bio { grid-template-columns: 1fr; gap: 24px; }
+ .about-page .bio-photo-placeholder { width: 100%; max-width: 420px; margin: 0 auto; }
+ .about-page h2 { font-size: 17px; margin-bottom: 17px; }
+ .about-statement-layout { grid-template-columns: 1fr; gap: 22px; }
+ .about-statement .stmt-photo { max-width: 420px; width: 100%; }
+ .about-bio-main .slot-text, .about-statement .slot-text { font-size: 15px; }
+}
