@@ -28,6 +28,10 @@ window.TM_SLOTS = (() => {
   add('contact.photo', '.contact-page-photo-placeholder', 'img');
   add('artist.photo', '.stmt-photo', 'img');
   add('artist.text', '.stmt-copy', 'box');
+  // ABOUT reuses the artist's existing exhibition text; the rest stays saved in content.json.
+  add('exh.text.1', '.about-exhibitions-text', 'box');
+  // Publications are added only when the artist creates content in ABOUT.
+  add('about.publications', '.about-publications-text', 'box');
   list('portfolio.img', '.pf-img', 'img', 8);
   list('portfolio.title', '.pf-title', 'txt', 8);
   for (let n = 1; n <= 8; n++) {

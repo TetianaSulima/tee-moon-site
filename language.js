@@ -11,6 +11,8 @@
     'BIOGRAPHY': 'БІОГРАФІЯ',
     'MORE ABOUT': 'БІЛЬШЕ ПРО МЕНЕ',
     'DOWNLOAD CV': 'ЗАВАНТАЖИТИ CV',
+    'DOWNLOAD CV (PDF)': 'ЗАВАНТАЖИТИ CV (PDF)',
+    'ARTIST CV': 'ТВОРЧЕ CV',
     'CV': 'РЕЗЮМЕ',
     'ARTIST STATEMENT': 'ТВОРЧА ЗАЯВА',
     'PORTFOLIO': 'ПОРТФОЛІО',

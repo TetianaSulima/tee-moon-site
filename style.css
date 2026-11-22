@@ -1561,3 +1561,31 @@ body:has(.adminbar) .about-page .bio-copy-placeholder { min-height: 150px; }
  .about-statement .stmt-photo { max-width: 420px; width: 100%; }
  .about-bio-main .slot-text, .about-statement .slot-text { font-size: 15px; }
 }
+
+/* ABOUT consolidated: exhibitions, future publications, and CV. */
+.about-exhibitions, .about-publications, .about-cv {
+  border-top: 1px solid #d7d2c7;
+  margin-top: clamp(35px, 5vw, 62px);
+  padding-top: clamp(25px, 3.4vw, 36px);
+}
+.about-exhibitions-text, .about-publications-text {
+  max-width: 800px;
+  line-height: 1.72;
+  font-size: 15px;
+  white-space: pre-line;
+}
+.about-exhibitions-text .slot-text,
+.about-publications-text .slot-text {
+  font-size: 15px;
+  line-height: 1.72;
+  white-space: pre-line;
+}
+.about-cv { margin-bottom: 46px; }
+.about-cv .about-cv-download { margin-top: 3px; }
+.about-exhibitions[hidden], .about-publications[hidden] { display:none!important; }
+body:has(.adminbar) .about-exhibitions-text,
+body:has(.adminbar) .about-publications-text { min-height: 120px; }
+@media(max-width:700px){
+  .about-exhibitions-text, .about-publications-text,
+  .about-exhibitions-text .slot-text, .about-publications-text .slot-text { font-size: 14px; }
+}

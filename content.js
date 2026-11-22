@@ -23,7 +23,7 @@
         bio.textContent = 'ABOUT';
         bio.classList.remove('active');
       }
-      nav.querySelectorAll('a[href="cv.html"], a[href="artist-statement.html"]').forEach(a => a.remove());
+      nav.querySelectorAll('a[href="cv.html"], a[href="artist-statement.html"], a[href="exhibitions.html"], a[href="publications.html"], a[href="art-fashion.html"]').forEach(a => a.remove());
     });
   }
 
@@ -37,17 +37,20 @@
     const hasPhoto = Boolean(D['artist.photo']);
     section.hidden = !(hasText || hasPhoto);
     section.classList.toggle('no-photo', !hasPhoto);
+    const exhibitions = document.querySelector('.about-exhibitions');
+    const pubs = document.querySelector('.about-publications');
+    if (exhibitions) exhibitions.hidden = !Boolean(D['exh.text.1|' + l] || D['exh.text.1|' + alternative]);
+    if (pubs) pubs.hidden = !Boolean(D['about.publications|' + l] || D['about.publications|' + alternative]);
   }
 
-  async function aboutCvLink() {
+  function aboutCvLink() {
     const link = document.querySelector('.about-cv-download');
     if (!link) return;
-    // CV has not been finalised. Display a real download link only when
-    // the user later uploads tee-moon-cv.pdf to the repository root.
-    try {
-      const response = await fetch('./tee-moon-cv.pdf', { method: 'HEAD' });
-      link.hidden = !response.ok;
-    } catch (error) { link.hidden = true; }
+    const l = curLang() === 'uk' ? 'uk' : 'en';
+    const file = `tee-moon-cv-${l}.pdf`;
+    link.href = `./${file}`;
+    link.download = file;
+    link.hidden = false;
   }
 
   function hero() {
@@ -91,6 +94,7 @@
     });
     document.querySelectorAll('.pf-more').forEach(a => { a.textContent = l === 'uk' ? 'ДІЗНАТИСЬ БІЛЬШЕ »' : 'READ MORE »'; });
     aboutVisibility();
+    aboutCvLink();
   }
   function lightbox() {
     const main = document.querySelector('.series-page[data-series]');
