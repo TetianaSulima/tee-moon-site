@@ -1589,3 +1589,104 @@ body:has(.adminbar) .about-publications-text { min-height: 120px; }
   .about-exhibitions-text, .about-publications-text,
   .about-exhibitions-text .slot-text, .about-publications-text .slot-text { font-size: 14px; }
 }
+
+
+/* ============================================================
+   TEE MOON: compact horizontal masthead and shorter HOME banner
+   Desktop: logo left, primary navigation right.
+   Mobile: short centered logo and wrapped navigation.
+   The selected art and language content are not modified.
+   ============================================================ */
+@media (min-width: 701px) {
+  .header {
+    width: min(1240px, 94%);
+    height: auto;
+    min-height: 100px;
+    margin: 0 auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(16px, 3vw, 44px);
+  }
+  .header .logo {
+    margin: 0;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  .header .logo img {
+    width: clamp(112px, 10.5vw, 150px);
+    height: auto;
+    max-height: 83px;
+    object-fit: contain;
+  }
+  .header .navigation {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    min-width: 0;
+    gap: clamp(12px, 1.7vw, 27px);
+  }
+  .header .navigation a {
+    font-size: clamp(11px, 0.94vw, 14px);
+  }
+  .header .navigation .active { padding-bottom: 5px; }
+  .header .language-switch { flex-shrink: 0; }
+}
+
+/* On narrower laptops, keep the header on one line. */
+@media (min-width: 701px) and (max-width: 940px) {
+  .header { width: 96%; gap: 13px; }
+  .header .logo img { width: 108px; max-height: 75px; }
+  .header .navigation { gap: 11px; }
+  .header .navigation a { font-size: 11px; }
+  .header .language-switch { gap: 4px; }
+  .header .language-switch img { width: 18px; height: 12px; }
+}
+
+/* Shorter image on HOME. The photo is still loaded from the editor. */
+.home-hero { margin-top: 10px; margin-bottom: 30px; }
+.home-hero-image {
+  width: 100%;
+  height: clamp(235px, 23vw, 300px);
+  aspect-ratio: auto;
+}
+
+@media (max-width: 700px) {
+  .header {
+    width: 95%;
+    height: auto;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 12px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    align-items: center;
+    justify-content: center;
+  }
+  .header .logo { margin: 0; }
+  .header .logo img { width: 113px; height: auto; }
+  .header .navigation {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 16px;
+  }
+  .header .navigation a { font-size: 11px; }
+  .home-hero { margin-top: 2px; margin-bottom: 24px; }
+  .home-hero-image {
+    height: clamp(160px, 42vw, 225px);
+    aspect-ratio: auto;
+  }
+}
+@media (max-width: 400px) {
+  .header .logo img { width: 102px; }
+  .header .navigation { gap: 9px 12px; }
+}
