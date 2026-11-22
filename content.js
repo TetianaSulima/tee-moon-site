@@ -135,24 +135,67 @@
     });
   }
   function forms() {
-    const map = { subscribeForm: 'subscribe', contactForm: 'contact', contactPageForm: 'contact' };
-    Object.keys(map).forEach(id => {
-      const f = document.getElementById(id);
-      if (!f) return;
-      f.addEventListener('submit', () => {
-        const btn = f.querySelector('button[type=submit]'), orig = btn.textContent, uk = curLang() === 'uk';
-        const get = s => { const e = f.querySelector(s); return e ? e.value.trim() : ''; };
-        const body = { type: map[id], name: get('input[type=text]'), email: get('input[type=email]'), phone: get('input[type=tel]'), message: get('textarea') };
-        btn.disabled = true;
-        const SB = window.TM_SB || {};
-        (SB.url && !/YOUR/.test(SB.url)
-          ? fetch(SB.url + '/rest/v1/messages', { method: 'POST', headers: { apikey: SB.key, 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(body) })
-          : Promise.reject(new Error('no config')))
-          .then(r => { if (!r.ok) throw new Error('fail'); f.reset(); btn.textContent = uk ? 'НАДІСЛАНО ✓' : 'SENT ✓'; })
-          .catch(() => { btn.textContent = uk ? 'ПОМИЛКА' : 'ERROR'; })
-          .finally(() => setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2500));
+    // Public Formspree form ID is safe to include in browser code.
+    // Site's subscription list will be connected to MailerLite separately.
+    const CONTACT_ENDPOINT = 'https://formspree.io/f/xrpqybyk';
+    const language = () => curLang() === 'uk';
+    const getValue = (form, selector) => form.querySelector(selector)?.value.trim() || '';
+    const showStatus = (form, message, error = false) => {
+      let status = form.querySelector('.tm-form-status');
+      if (!status) {
+        status = document.createElement('p');
+        status.className = 'tm-form-status';
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-live', 'polite');
+        status.style.cssText = 'margin:8px 0;font-size:14px;line-height:1.4;text-align:center;';
+        form.appendChild(status);
+      }
+      status.style.color = error ? '#c94040' : 'inherit';
+      status.textContent = message;
+    };
+    ['contactForm', 'contactPageForm'].forEach(id => {
+      const form = document.getElementById(id);
+      if (!form) return;
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (!form.reportValidity()) return;
+        const button = form.querySelector('button[type="submit"]');
+        if (!button || button.disabled) return;
+        const previousText = button.textContent;
+        const data = new FormData();
+        data.set('name', getValue(form, 'input[type="text"]'));
+        data.set('email', getValue(form, 'input[type="email"]'));
+        data.set('phone', getValue(form, 'input[type="tel"]'));
+        data.set('message', getValue(form, 'textarea'));
+        data.set('subject', 'Tee Moon website contact');
+        button.disabled = true;
+        button.textContent = language() ? 'НАДСИЛАННЯ…' : 'SENDING…';
+        showStatus(form, '');
+        try {
+          const response = await fetch(CONTACT_ENDPOINT, {
+            method: 'POST',
+            body: data,
+            headers: { Accept: 'application/json' }
+          });
+          if (!response.ok) throw new Error('Formspree status ' + response.status);
+          form.reset();
+          showStatus(form, language() ? 'Повідомлення надіслано. Дякую!' : 'Message sent. Thank you!');
+        } catch (error) {
+          console.error('Contact form submission failed:', error);
+          showStatus(form, language() ? 'Не вдалося надіслати. Спробуйте ще раз пізніше.' : 'Could not send. Please try again later.', true);
+        } finally {
+          button.disabled = false;
+          button.textContent = previousText;
+        }
       });
     });
+    const subscribe = document.getElementById('subscribeForm');
+    if (subscribe) {
+      subscribe.addEventListener('submit', event => {
+        event.preventDefault();
+        showStatus(subscribe, language() ? 'Підписка незабаром буде доступна.' : 'Newsletter signup is coming soon.');
+      });
+    }
   }
   async function start() {
     try {
