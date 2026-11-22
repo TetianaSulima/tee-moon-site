@@ -1290,3 +1290,187 @@ body {
   .footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-recaptcha { margin: 0 auto !important; }
   .footer.tm-minimal-footer .copyright { margin-top: 11px; padding-top: 9px; }
 }
+
+/* ==============================================================
+   TEE MOON | CONTACT page: light layout with discreet gold accents
+   Overrides the older black contact panel on public site and in
+   the existing admin preview. No JavaScript/form changes required.
+   =============================================================== */
+.contact-page {
+  margin: 26px auto 38px;
+}
+.contact-page > h1 {
+  margin: 0 auto 30px;
+  color: #202020;
+  font-weight: 400;
+}
+.contact-page-panel {
+  width: min(1060px, 92%);
+  min-height: 0;
+  grid-template-columns: 43% minmax(0, 57%);
+  border: 1px solid #ded7cb;
+  background: #f9f6ee;
+}
+.contact-page-photo-placeholder {
+  min-height: 440px;
+  background-color: #eee9df;
+}
+.contact-page-form-area {
+  background: #f9f6ee;
+  color: #22201d;
+  padding: 38px clamp(24px, 4.1vw, 57px);
+  border-left: 2px solid var(--tm-footer-gold, #ba8b34);
+  display: flex;
+  align-items: center;
+}
+.contact-page-form {
+  gap: 12px;
+  width: 100%;
+}
+.contact-page-form input,
+.contact-page-form textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid #c9c1b4;
+  border-radius: 0;
+  background: #fffefa;
+  color: #24211e;
+  padding: 11px 15px;
+  font: 400 14px/1.45 Arial, Helvetica, sans-serif;
+  outline: 0;
+  box-shadow: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.contact-page-form input {
+  height: 49px;
+}
+.contact-page-form textarea {
+  height: 124px;
+  min-height: 124px;
+  resize: vertical;
+}
+.contact-page-form input::placeholder,
+.contact-page-form textarea::placeholder {
+  color: #777067;
+  opacity: 1;
+}
+.contact-page-form input:focus-visible,
+.contact-page-form textarea:focus-visible {
+  border-color: var(--tm-footer-gold, #ba8b34);
+  box-shadow: 0 0 0 2px rgba(186,139,52,.13);
+}
+.contact-page-form button {
+  align-self: center;
+  min-width: 118px;
+  min-height: 43px;
+  margin-top: 4px;
+  padding: 10px 22px;
+  border: 1px solid var(--tm-footer-gold, #ba8b34);
+  border-radius: 0;
+  background: var(--tm-footer-gold, #ba8b34);
+  color: #1d1913;
+  font: 600 12px/1.4 Arial, Helvetica, sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.contact-page-form button:hover {
+  background: var(--tm-footer-gold-hover, #d3a653);
+  border-color: var(--tm-footer-gold-hover, #d3a653);
+  color: #1d1913;
+}
+.contact-page-form button:focus-visible {
+  outline: 2px solid #8e6928;
+  outline-offset: 3px;
+}
+.contact-page-form button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+.contact-page-form .tm-form-status {
+  color: #386640;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 3px 0 0;
+  text-align: center;
+}
+.contact-page-form .tm-form-status.err {
+  color: #9b2c27;
+}
+@media (max-width: 760px) {
+  .contact-page {
+    margin: 20px auto 30px;
+  }
+  .contact-page > h1 {
+    margin-bottom: 21px;
+    font-size: 28px;
+  }
+  .contact-page-panel {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(540px, 92%);
+  }
+  .contact-page-photo-placeholder {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .contact-page-form-area {
+    border-left: 0;
+    border-top: 2px solid var(--tm-footer-gold, #ba8b34);
+    padding: 25px 24px 29px;
+  }
+  .contact-page-form input {
+    height: 47px;
+  }
+  .contact-page-form textarea {
+    height: 120px;
+  }
+}
+@media (max-width: 420px) {
+  .contact-page-form-area { padding: 22px 16px 26px; }
+  .contact-page-form { gap: 10px; }
+}
+
+/* TEE MOON | Ukrainian newsletter button alignment / compact font fix.
+   Works with the MailerLite markup and existing language.js translation.
+   Desktop width accommodates ПІДПИСАТИСЯ without overflow. */
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 form.ml-block-form {
+  grid-template-columns: minmax(170px, 240px) 304px 164px;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit {
+  width: 164px !important;
+  min-width: 164px !important;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 164px !important;
+  min-width: 164px !important;
+  box-sizing: border-box !important;
+  min-height: 43px !important;
+  padding: 9px 12px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  letter-spacing: .015em !important;
+  text-transform: uppercase;
+}
+.footer.tm-minimal-footer .follow h2,
+.footer.tm-minimal-footer .subscribe h3 {
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
+@media (min-width: 561px) and (max-width: 663px) {
+  .footer.tm-minimal-footer .subscribe #mlb2-48877838 form.ml-block-form {
+    grid-template-columns: 224px 304px;
+  }
+}
+@media (max-width: 560px) {
+  .footer.tm-minimal-footer .subscribe #mlb2-48877838 form.ml-block-form {
+    display: flex;
+    flex-direction: column;
+  }
+}
