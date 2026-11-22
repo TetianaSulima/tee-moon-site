@@ -159,6 +159,32 @@
       });
   }
 
+  // Minimal footer for the public site. CONTACT remains available on contact.html.
+  function setupFooter() {
+    const footer = document.querySelector('footer.footer');
+    if (!footer) return;
+    footer.classList.add('tm-minimal-footer');
+
+    // The original contact form remains on the dedicated CONTACT page.
+    footer.querySelector('.contact-form')?.remove();
+
+    const follow = footer.querySelector('.follow');
+    if (follow && !follow.querySelector('.socials')) {
+      // No social profile URLs have been configured; do not direct visitors to unrelated accounts.
+      // These two symbols are decorative until the artist provides her profile URLs.
+      const socials = document.createElement('div');
+      socials.className = 'socials tm-socials';
+      socials.innerHTML =
+        '<span class="tm-social tm-social-pending" title="Instagram profile link to be added" aria-label="Instagram (link pending)"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span>' +
+        '<span class="tm-social tm-social-pending" title="Facebook profile link to be added" aria-label="Facebook (link pending)"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span>' +
+        '<a class="tm-social" href="contact.html" aria-label="Contact Tee Moon" title="Contact Tee Moon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></a>';
+      follow.appendChild(socials);
+    }
+
+    const newsletterHeading = footer.querySelector('.subscribe h3');
+    if (newsletterHeading) newsletterHeading.textContent = 'NEWSLETTER';
+  }
+
   function forms() {
     // Public Formspree form ID is safe to include in browser code.
     // Site's subscription list will be connected to MailerLite separately.
@@ -217,6 +243,7 @@
     setupNewsletter();
   }
   async function start() {
+    setupFooter();
     try {
       const response = await fetch('./content.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('content.json: HTTP ' + response.status);

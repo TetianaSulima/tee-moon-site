@@ -976,3 +976,128 @@ body {
     transform-origin: left top;
   }
 }
+
+
+/* TEE MOON: centered, airy footer. Public pages only; admin panel CSS remains intact. */
+.footer.tm-minimal-footer {
+  background: #faf8f2;
+  color: #222;
+  padding: 43px 24px 26px;
+  min-height: 0;
+  border-top: 1px solid #e4dfd6;
+}
+.footer.tm-minimal-footer .follow h2 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: .025em;
+}
+.footer.tm-minimal-footer .tm-socials {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  margin: 0;
+}
+.footer.tm-minimal-footer .tm-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 32px;
+  padding: 0;
+  color: #272727;
+  font-size: 23px;
+  line-height: 1;
+  text-decoration: none;
+  transition: opacity .2s ease;
+}
+.footer.tm-minimal-footer .tm-social:hover { opacity: .62; }
+.footer.tm-minimal-footer .tm-social-pending { cursor: default; }
+.footer.tm-minimal-footer .footer-content {
+  display: block;
+  width: min(460px,100%);
+  max-width: 100%;
+  margin: 32px auto 0;
+  padding-top: 27px;
+  border-top: 1px solid #dad5cc;
+}
+.footer.tm-minimal-footer .subscribe {
+  padding: 0;
+  text-align: center;
+}
+.footer.tm-minimal-footer .subscribe h3 {
+  margin: 0 0 11px;
+  font-size: 23px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  line-height: 1.4;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838,
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedWrapper,
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-align-center {
+  background: transparent !important;
+  width: 100% !important;
+  max-width: 460px !important;
+  box-shadow: none !important;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedContent,
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedContent p {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  color: #555;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-fieldRow { margin-bottom: 12px; }
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 input[type="email"] {
+  background: #fff;
+  border: 1px solid #bfb9b0;
+  border-radius: 0;
+  color: #242424;
+  min-height: 48px;
+  padding: 12px 14px;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-recaptcha {
+  margin: 12px auto;
+  float: none !important;
+  min-height: 76px;
+  width: 304px;
+  max-width: 100%;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit {
+  margin: 12px 0 0;
+  float: none;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary {
+  background: #222;
+  color: #fff;
+  border: 1px solid #222;
+  border-radius: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  font: 14px/1.4 Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary:hover {
+  background: #444;
+}
+.footer.tm-minimal-footer .copyright {
+  margin: 29px auto 0;
+  padding-top: 23px;
+  width: min(460px,100%);
+  border-top: 1px solid #dad5cc;
+  font-size: 12px;
+  color: #777;
+}
+@media (max-width: 480px) {
+  .footer.tm-minimal-footer { padding: 36px 20px 24px; }
+  .footer.tm-minimal-footer .footer-content { margin-top: 26px; padding-top: 23px; }
+  .footer.tm-minimal-footer .subscribe h3 { font-size: 21px; }
+  .footer.tm-minimal-footer .tm-socials { gap: 26px; }
+  .footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-recaptcha { text-align: left; }
+}
