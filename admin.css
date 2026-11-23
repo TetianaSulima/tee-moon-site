@@ -49,21 +49,39 @@ main a{cursor:default}
 .inbox-page button{background:transparent;border:1px solid #000;color:#000;padding:7px 14px;font-size:12px;cursor:pointer}
 .inbox-page button:hover{background:#000;color:#fff}
 
-/* GitHub publication controls */
-.adminbar .publish-btn{background:#fff;color:#111;font-weight:700;border-color:#fff}
-.adminbar .publish-btn:hover{background:#d5e4ff;border-color:#d5e4ff}
-.admin-info{font:13px/1.45 Arial,sans-serif;background:#f1efe9;padding:10px 20px;color:#333}
-.admin-info a{color:#111;text-decoration:underline}
-.publish-dialog{box-sizing:border-box;border:1px solid #222;padding:24px;max-width:520px;width:calc(100vw - 32px);background:#fff;color:#111;box-shadow:0 12px 70px #0005;font:14px/1.5 Arial,sans-serif}
-.publish-dialog::backdrop{background:rgba(0,0,0,.65)}
-.publish-dialog h2{font-weight:400;font-size:23px;margin:0 0 12px}
-.publish-dialog p{margin:10px 0}
-.publish-dialog label{display:block;margin-top:16px;font-weight:700}
-.publish-dialog input{display:block;width:100%;box-sizing:border-box;padding:11px;font:14px Arial,sans-serif;border:1px solid #888}
-.publish-dialog a{color:#111;text-decoration:underline}
-.publish-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
-.publish-actions button{cursor:pointer;border:1px solid #000;padding:12px 16px;background:#fff;color:#000}
-.publish-actions button[type=submit]{background:#000;color:#fff}
-.publish-dialog button:disabled{opacity:.5;cursor:wait}
-#publishProgress{min-height:1.4em;color:#555}
-#publishProgress.err{color:#a00}
+
+/* Project collage editor, matches website strip and supports group uploads. */
+.tm-admin-collage { background: #eee8dd !important; cursor: default; }
+.tm-admin-collage::after,
+.tm-admin-collage.has::after,
+.tm-admin-collage.has:hover::after { content: none !important; display: none !important; }
+.tm-admin-collage .tm-admin-stage { position: absolute; inset: 0; }
+.tm-admin-collage .tm-admin-grid { opacity: 1; }
+.tm-admin-collage .tm-admin-caption {
+  position: absolute; z-index: 8; bottom: 8px; left: 50%; transform: translateX(-50%);
+  background: rgba(250,248,242,.92); color: #473c32;
+  font-size: 10px; letter-spacing: .05em; padding: 4px 8px; white-space: nowrap;
+}
+.tm-admin-collage .bn-tools {
+  position: absolute; z-index: 8; top: 6px; left: 6px; right: 6px;
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.tm-admin-collage .bn-tools .bn {
+  background: rgba(250,248,242,.96); color: #473c32;
+  border: 1px solid #b38a35;
+  padding: 6px 8px; font-size: 10px;
+}
+.tm-admin-collage .bn-tools .bn:hover { background: #b38a35; color: white; }
+.tm-admin-collage .bn-prev,
+.tm-admin-collage .bn-next { background: rgba(250,248,242,.9); color: #473c32; }
+.tm-admin-collage .bn-dots { bottom: -21px; }
+.tm-admin-collage .bn-dots button {
+  width: 9px; height: 9px; border: 0; border-radius: 50%;
+  background: #d6c8ad; padding: 0; cursor: pointer;
+}
+.tm-admin-collage .bn-dots button.on { background: #b38a35; }
+.tm-admin-collage .bn[hidden] { display: none !important; }
+@media(max-width:700px) {
+  .tm-admin-collage .bn-tools .bn { padding: 5px 6px; font-size: 9px; }
+  .tm-admin-collage .tm-admin-caption { font-size: 9px; }
+}

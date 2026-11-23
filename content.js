@@ -53,26 +53,126 @@
     link.hidden = false;
   }
 
+
+  // Consistent artist identification beside the geometric mark.
+  function setupBrand() {
+    const header = document.querySelector('header.header');
+    const logo = header && header.querySelector('.logo');
+    const nav = header && header.querySelector('.navigation');
+    if (!logo || !nav || header.querySelector('.tm-brand')) return;
+    const brand = document.createElement('div');
+    brand.className = 'tm-brand';
+    brand.setAttribute('aria-label', 'Tee Moon, Contemporary Visual Artist');
+    const name = document.createElement('span');
+    name.className = 'tm-brand-name';
+    name.textContent = 'TEE MOON';
+    const desc = document.createElement('span');
+    desc.className = 'tm-brand-subtitle';
+    desc.textContent = 'CONTEMPORARY VISUAL ARTIST';
+    // Keep brand language-independent so the artist name remains recognizable.
+    name.setAttribute('translate', 'no');
+    desc.setAttribute('translate', 'no');
+    brand.setAttribute('translate', 'no');
+    brand.append(name, desc);
+    logo.after(brand);
+  }
   function hero() {
-    const a = D['home.banners'] || (D['home.hero'] ? [D['home.hero']] : []);
-    const el = document.querySelector('.home-hero-image');
-    if (!el || !a.length) return;
-    if (a.length === 1) { el.style.background = `url(${a[0]}) center/cover no-repeat`; return; }
-    el.classList.add('tm-slider');
-    el.innerHTML = '<div class="tm-wrap">' + a.map((u, n) => `<div class="tm-slide${n ? '' : ' on'}" style="background-image:url(${u})"></div>`).join('') + '</div>' +
-      '<button type="button" class="tm-nav tm-prev" aria-label="Previous">‹</button><button type="button" class="tm-nav tm-next" aria-label="Next">›</button>' +
-      '<div class="tm-dots">' + a.map((_, n) => `<span data-n="${n}"${n ? '' : ' class="on"'}></span>`).join('') + '</div>';
-    const S = el.querySelectorAll('.tm-slide'), P = el.querySelectorAll('.tm-dots span');
-    let i = 0, t;
-    const go = n => { i = (n + a.length) % a.length; S.forEach((s, k) => s.classList.toggle('on', k === i)); P.forEach((d, k) => d.classList.toggle('on', k === i)); };
-    const auto = () => { clearInterval(t); t = setInterval(() => go(i + 1), 5000); };
-    el.querySelector('.tm-prev').onclick = () => { go(i - 1); auto(); };
-    el.querySelector('.tm-next').onclick = () => { go(i + 1); auto(); };
-    el.querySelector('.tm-dots').onclick = e => { if (e.target.dataset.n) { go(+e.target.dataset.n); auto(); } };
+    const host = document.querySelector('.home-hero-image');
+    if (!host) return;
+    // A collage is one curated project/series, containing ideally 5–7 photographs.
+    // Legacy home.banners becomes ONE sample collage until edited in the studio.
+    const configured = Array.isArray(D['home.collages']) ? D['home.collages'] : null;
+    const legacy = Array.isArray(D['home.banners']) ? D['home.banners'] :
+      (D['home.hero'] ? [D['home.hero']] : []);
+    const groups = (configured === null ? [legacy] : configured)
+      .filter(Array.isArray)
+      .map(photos => photos.filter(src => typeof src === 'string' && src.trim()))
+      .filter(photos => photos.length);
+    if (!groups.length) return;
+
+    host.style.background = 'none';
+    host.classList.add('tm-collage-host');
+    host.replaceChildren();
+    const stage = document.createElement('div');
+    stage.className = 'tm-collage-stage';
+    stage.setAttribute('role', 'group');
+    stage.setAttribute('aria-label', 'Selected photographic projects');
+    host.append(stage);
+    const frames = groups.map((photos, idx) => {
+      const frame = document.createElement('div');
+      frame.className = 'tm-project-collage' + (idx === 0 ? ' on' : '');
+      frame.style.setProperty('--tm-tile-count', String(photos.length));
+      frame.setAttribute('aria-hidden', String(idx !== 0));
+      photos.forEach((url, imageIdx) => {
+        const tile = document.createElement('div');
+        tile.className = 'tm-collage-tile';
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = `Artwork ${imageIdx + 1} of project ${idx + 1}`;
+        img.loading = idx === 0 ? 'eager' : 'lazy';
+        if (idx === 0) img.fetchPriority = 'high';
+        tile.append(img);
+        frame.append(tile);
+      });
+      stage.append(frame);
+      return frame;
+    });
+    if (frames.length < 2) return; // One project is a complete banner, without fake slideshow controls.
+
+    const prev = document.createElement('button');
+    const next = document.createElement('button');
+    prev.type = next.type = 'button';
+    prev.className = 'tm-collage-arrow tm-collage-prev';
+    next.className = 'tm-collage-arrow tm-collage-next';
+    prev.textContent = '‹'; next.textContent = '›';
+    prev.setAttribute('aria-label', 'Previous project');
+    next.setAttribute('aria-label', 'Next project');
+    const dots = document.createElement('div');
+    dots.className = 'tm-collage-dots';
+    dots.setAttribute('aria-label', 'Choose project');
+    const buttons = frames.map((_, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', `Project ${idx + 1}`);
+      b.setAttribute('aria-current', String(idx === 0));
+      dots.append(b);
+      return b;
+    });
+    host.append(prev, next, dots);
+
+    let selected = 0;
+    const show = idx => {
+      selected = (idx + frames.length) % frames.length;
+      frames.forEach((f, n) => {
+        f.classList.toggle('on', n === selected);
+        f.setAttribute('aria-hidden', String(n !== selected));
+      });
+      buttons.forEach((b, n) => b.setAttribute('aria-current', String(n === selected)));
+    };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = null;
+    const stop = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
+    const play = () => {
+      stop();
+      if (!reduced && !document.hidden) timer = window.setInterval(() => show(selected + 1), 6500);
+    };
+    prev.addEventListener('click', () => { show(selected - 1); play(); });
+    next.addEventListener('click', () => { show(selected + 1); play(); });
+    buttons.forEach((b, n) => b.addEventListener('click', () => { show(n); play(); }));
+    host.addEventListener('mouseenter', stop);
+    host.addEventListener('mouseleave', play);
+    host.addEventListener('focusin', stop);
+    host.addEventListener('focusout', e => { if (!host.contains(e.relatedTarget)) play(); });
+    document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
     let x0 = null;
-    el.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
-    el.addEventListener('touchend', e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) { go(i + (d < 0 ? 1 : -1)); auto(); } x0 = null; });
-    auto();
+    host.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive:true });
+    host.addEventListener('touchend', e => {
+      if (x0 === null) return;
+      const diff = e.changedTouches[0].clientX - x0;
+      if (Math.abs(diff) > 35) { show(selected + (diff < 0 ? 1 : -1)); play(); }
+      x0 = null;
+    }, { passive:true });
+    play();
   }
 
   function apply(l) {
@@ -288,6 +388,7 @@
   async function start() {
     aboutNavigation();
     aboutCvLink();
+    setupBrand();
     setupFooter();
     try {
       const response = await fetch('./content.json', { cache: 'no-store' });

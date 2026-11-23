@@ -199,40 +199,105 @@
   }
 
 
-  const banners = () => D['home.banners'] || (D['home.hero'] ? [D['home.hero']] : []);
+  // Each slide is a whole project. Existing 5 legacy images remain as a
+  // temporary sample collage; the editor can replace them as one project.
+  const collages = () => {
+    if (Array.isArray(D['home.collages'])) return D['home.collages']
+      .filter(Array.isArray).map(group => group.filter(v => typeof v === 'string' && v));
+    const old = Array.isArray(D['home.banners']) ? D['home.banners'] :
+      (D['home.hero'] ? [D['home.hero']] : []);
+    return old.length ? [old.slice()] : [];
+  };
   function bindBanner(el) {
-    let i = 0;
-    el.classList.add('slot-img', 'banner');
-    el.innerHTML = '<button type="button" class="bn bn-prev">‹</button><button type="button" class="bn bn-next">›</button>' +
-      '<div class="bn-dots"></div><div class="bn-tools"><button type="button" class="bn bn-add">+ ДОБАВИТЬ БАННЕР</button>' +
-      '<button type="button" class="bn bn-del">✕ УДАЛИТЬ ЭТОТ</button></div>';
-    const q = s => el.querySelector(s), dots = q('.bn-dots');
-    const set = arr => { D['home.banners'] = arr; delete D['home.hero']; queue(); draw(); };
+    let current = 0;
+    el.classList.add('slot-img', 'banner', 'tm-admin-collage');
+    el.style.background = 'none';
+    el.innerHTML = `<div class="tm-admin-stage"></div>
+      <button type="button" class="bn bn-prev" aria-label="Предыдущая серия">‹</button>
+      <button type="button" class="bn bn-next" aria-label="Следующая серия">›</button>
+      <div class="bn-dots" aria-label="Коллажи проектов"></div>
+      <div class="tm-admin-caption" aria-live="polite"></div>
+      <div class="bn-tools">
+        <button type="button" class="bn bn-add">+ НОВЫЙ ПРОЕКТ (5–7 ФОТО)</button>
+        <button type="button" class="bn bn-replace">ЗАМЕНИТЬ ФОТО</button>
+        <button type="button" class="bn bn-del">✕ УДАЛИТЬ ПРОЕКТ</button>
+      </div>`;
+    const q = sel => el.querySelector(sel);
+    const set = updated => {
+      // No destructive migration: the older home.banners value is preserved.
+      D['home.collages'] = updated;
+      queue();
+      draw();
+    };
     function draw() {
-      const a = banners();
-      if (i >= a.length) i = Math.max(0, a.length - 1);
-      el.style.backgroundImage = a.length ? `url(${a[i]})` : '';
-      el.classList.toggle('has', a.length > 0);
-      dots.innerHTML = a.map((_, n) => `<span class="${n === i ? 'on' : ''}" data-n="${n}"></span>`).join('');
-      q('.bn-prev').style.display = q('.bn-next').style.display = a.length > 1 ? '' : 'none';
-      q('.bn-del').style.display = a.length ? '' : 'none';
+      const all = collages();
+      current = Math.max(0, Math.min(current, all.length - 1));
+      const frame = q('.tm-admin-stage');
+      frame.replaceChildren();
+      const list = all[current] || [];
+      const grid = document.createElement('div');
+      grid.className = 'tm-admin-grid tm-project-collage';
+      grid.style.setProperty('--tm-tile-count', String(list.length));
+      list.forEach((src, idx) => {
+        const tile = document.createElement('div');
+        tile.className = 'tm-collage-tile';
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `Фото ${idx + 1}`;
+        tile.append(img);
+        grid.append(tile);
+      });
+      frame.append(grid);
+      q('.tm-admin-caption').textContent = all.length
+        ? `КОЛЛАЖ ${current + 1} / ${all.length} · ${list.length} ФОТО · ОДИН ПРОЕКТ`
+        : 'ДОБАВЬТЕ 5–7 ФОТОГРАФИЙ ОДНОЙ СЕРИИ';
+      q('.bn-dots').replaceChildren();
+      all.forEach((_, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = idx === current ? 'on' : '';
+        b.title = `Проект ${idx + 1}`;
+        b.setAttribute('aria-label', `Проект ${idx + 1}`);
+        b.onclick = () => { current = idx; draw(); };
+        q('.bn-dots').append(b);
+      });
+      q('.bn-prev').hidden = q('.bn-next').hidden = all.length < 2;
+      q('.bn-replace').hidden = q('.bn-del').hidden = all.length === 0;
+      el.classList.toggle('has', all.length > 0);
     }
-    function add() {
+    function choosePhotos(mode) {
       imgInput.multiple = true;
       imgInput.onchange = async () => {
-        const files = [...imgInput.files]; imgInput.value = ''; imgInput.multiple = false;
-        const arr = banners().slice();
-        for (const f of files) await new Promise(r => readImg(f, u => { arr.push(u); r(); }, 1600));
-        if (files.length) { i = arr.length - 1; set(arr); }
+        const files = [...imgInput.files];
+        imgInput.value = ''; imgInput.multiple = false;
+        if (!files.length) return;
+        if (files.length < 5 || files.length > 7) {
+          alert('Для одного коллажа выберите от 5 до 7 фотографий одной серии.');
+          return;
+        }
+        const newPhotos = [];
+        for (const file of files) {
+          await new Promise(resolve => readImg(file, url => { newPhotos.push(url); resolve(); }, 1600));
+        }
+        const updated = collages().slice();
+        if (mode === 'replace' && updated.length) updated[current] = newPhotos;
+        else { updated.push(newPhotos); current = updated.length - 1; }
+        set(updated);
       };
       imgInput.click();
     }
-    q('.bn-add').onclick = e => { e.stopPropagation(); add(); };
-    q('.bn-del').onclick = e => { e.stopPropagation(); const a = banners().slice(); a.splice(i, 1); set(a); };
-    q('.bn-prev').onclick = e => { e.stopPropagation(); const n = banners().length; i = (i - 1 + n) % n; draw(); };
-    q('.bn-next').onclick = e => { e.stopPropagation(); const n = banners().length; i = (i + 1) % n; draw(); };
-    dots.onclick = e => { if (e.target.dataset.n) { i = +e.target.dataset.n; draw(); } };
-    el.onclick = e => { if (e.target === el && !banners().length) add(); };
+    q('.bn-add').onclick = e => { e.stopPropagation(); choosePhotos('add'); };
+    q('.bn-replace').onclick = e => { e.stopPropagation(); choosePhotos('replace'); };
+    q('.bn-del').onclick = e => {
+      e.stopPropagation();
+      if (!confirm('Удалить этот коллаж? Другие проекты останутся.')) return;
+      const updated = collages().slice();
+      updated.splice(current, 1);
+      current = Math.max(0, current - 1);
+      set(updated);
+    };
+    q('.bn-prev').onclick = e => { e.stopPropagation(); const n = collages().length; if (n) { current = (current - 1 + n) % n; draw(); } };
+    q('.bn-next').onclick = e => { e.stopPropagation(); const n = collages().length; if (n) { current = (current + 1) % n; draw(); } };
     draw();
   }
 
@@ -330,5 +395,15 @@
       publishBtn.disabled = false;
     }
   };
+  // Match the public masthead in the visual editor.
+  const header = document.querySelector('header.header');
+  const logo = header && header.querySelector('.logo');
+  if (logo && !header.querySelector('.tm-brand')) {
+    const brand = document.createElement('div');
+    brand.className = 'tm-brand';
+    brand.setAttribute('translate', 'no');
+    brand.innerHTML = '<span class="tm-brand-name">TEE MOON</span><span class="tm-brand-subtitle">CONTEMPORARY VISUAL ARTIST</span>';
+    logo.after(brand);
+  }
   boot();
 })();
