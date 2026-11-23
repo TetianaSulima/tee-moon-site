@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap');
+
 
 * {
   margin: 0;
@@ -1689,4 +1691,318 @@ body:has(.adminbar) .about-publications-text { min-height: 120px; }
 @media (max-width: 400px) {
   .header .logo img { width: 102px; }
   .header .navigation { gap: 9px 12px; }
+}
+
+
+/* -------------------------------------------------------------
+   TEE MOON | Header aligned exactly to the main content width
+   The HOME banner and the header now share a 960px layout grid.
+   No HTML, images, navigation or language data are changed.
+   ------------------------------------------------------------- */
+@media (min-width: 701px) {
+  .header {
+    width: 960px;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media (min-width: 701px) and (max-width: 940px) {
+  .header {
+    width: 960px;
+    max-width: 95%;
+  }
+}
+
+
+/* ===================================================================
+   TEE MOON / CONTEMPORARY GALLERY EDITION — 2026-11-22
+   Retains the last aligned header + original logo, newsletter & admin.
+   All image reductions below are scoped to the HOME page only.
+   =================================================================== */
+:root {
+  --gallery-paper: #faf8f2;
+  --gallery-ink: #473c32;
+  --gallery-copy: #61594f;
+  --gallery-muted: #797062;
+  --gallery-gold: #b38a35;
+  --gallery-gold-light: #c7a65c;
+  --gallery-rule: #d9d0be;
+  --gallery-sans: 'Manrope', 'Segoe UI', Arial, sans-serif;
+  --gallery-serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
+}
+html { background: var(--gallery-paper); }
+body {
+  background: var(--gallery-paper);
+  color: var(--gallery-ink);
+  font-family: var(--gallery-sans);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+/* Fine structure: align masthead with the same 960px grid as the banner */
+.header {
+  border-bottom: 1px solid var(--gallery-rule);
+  padding-bottom: 18px;
+}
+.header .navigation a,
+.header .navigation .dd > a {
+  color: var(--gallery-ink);
+  font-family: var(--gallery-sans);
+  font-weight: 600;
+  letter-spacing: .045em;
+  text-decoration: none;
+}
+.header .navigation a:hover,
+.header .navigation .dd > a:hover { color: var(--gallery-gold); opacity: 1; }
+.header .navigation a.active {
+  border-bottom: 1px solid var(--gallery-gold);
+  color: var(--gallery-gold);
+  padding-bottom: 5px;
+}
+.header .language-switch button:focus-visible,
+.header .navigation a:focus-visible {
+  outline: 1px solid var(--gallery-gold);
+  outline-offset: 5px;
+}
+.dd-menu {
+  border: 1px solid var(--gallery-rule);
+  background: var(--gallery-paper);
+  box-shadow: 0 9px 25px rgba(57,42,17,.06);
+}
+.dd-menu a { color: var(--gallery-ink); }
+/* Art-led hierarchy, serif headings with a restrained gilt rule */
+.home-page h2,
+.about-page > h1,
+.about-page h2,
+.prints h1,
+.contact-page > h1,
+.pf-page > h1,
+.series-page > h1,
+.stmt-page > h1,
+.list-page > h1,
+.art-fashion-page > h1 {
+  font-family: var(--gallery-serif);
+  font-weight: 500;
+  color: var(--gallery-ink);
+  line-height: 1.12;
+  letter-spacing: .005em;
+}
+.home-page h2 {
+  font-size: clamp(33px, 3.3vw, 43px);
+  margin-bottom: 27px;
+}
+.about-page > h1,
+.prints h1,
+.contact-page > h1,
+.pf-page > h1,
+.series-page > h1,
+.stmt-page > h1,
+.list-page > h1,
+.art-fashion-page > h1 {
+  font-size: clamp(38px, 4.2vw, 53px);
+}
+.about-page h2 { font-size: clamp(27px, 3vw, 34px); letter-spacing: .015em; }
+.home-page h2::after,
+.about-page > h1::after,
+.about-page h2::after,
+.prints h1::after,
+.contact-page > h1::after,
+.pf-page > h1::after,
+.series-page > h1::after,
+.stmt-page > h1::after,
+.list-page > h1::after,
+.art-fashion-page > h1::after {
+  content: '';
+  display: block;
+  width: 47px;
+  height: 1px;
+  background: var(--gallery-gold);
+  margin: 13px auto 0;
+}
+.about-page h2::after { margin: 11px 0 0; width: 40px; }
+.home-bio-text h3 {
+  color: var(--gallery-ink);
+  font-family: var(--gallery-serif);
+  font-size: clamp(24px, 2.5vw, 31px);
+  font-weight: 500;
+  line-height: 1.25;
+}
+.home-bio-text, .home-bio-text .slot-text,
+.home-bio-text p,
+.about-bio-main .slot-text,
+.about-statement .slot-text,
+.about-exhibitions-text .slot-text,
+.about-publications-text .slot-text,
+.description, .description p,
+.series-intro, .series-intro .slot-text,
+.list-text, .stmt-copy,
+.contact-description {
+  color: var(--gallery-copy);
+  font-family: var(--gallery-sans);
+  line-height: 1.75;
+}
+/* No heavy black blocks: outline links and warm brass micro-highlights */
+.home-button,
+.contact-button,
+.about-cv-download {
+  border: 1px solid var(--gallery-gold);
+  background: transparent;
+  color: var(--gallery-ink);
+  border-radius: 0;
+  padding: 12px 22px;
+  min-height: 43px;
+  font-family: var(--gallery-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: .085em;
+  text-decoration: none;
+  box-shadow: none;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.home-button:hover,
+.contact-button:hover,
+.about-cv-download:not([hidden]):hover {
+  background: var(--gallery-gold);
+  border-color: var(--gallery-gold);
+  color: #fffdf7;
+}
+.home-button:focus-visible,
+.contact-button:focus-visible,
+.about-cv-download:focus-visible,
+.contact-page-form button:focus-visible {
+  outline: 2px solid var(--gallery-gold);
+  outline-offset: 4px;
+}
+.contact-page-form button {
+  background: var(--gallery-gold);
+  color: #fffdf7;
+  border-color: var(--gallery-gold);
+  border-radius: 0;
+  font-family: var(--gallery-sans);
+  font-weight: 600;
+  letter-spacing: .08em;
+}
+.contact-page-form button:hover {
+  background: #9d752b;
+  border-color: #9d752b;
+  color: #fffdf7;
+}
+.contact-page-form input,
+.contact-page-form textarea {
+  font-family: var(--gallery-sans);
+  border-radius: 0;
+  color: var(--gallery-ink);
+}
+.contact-page-form input:focus,
+.contact-page-form textarea:focus { border-color: var(--gallery-gold); }
+.contact-page-form input::placeholder,
+.contact-page-form textarea::placeholder { color: #80766a; }
+.contact-page-form-area { color: var(--gallery-ink); }
+.about-statement, .about-exhibitions, .about-publications, .about-cv {
+  border-top-color: var(--gallery-rule);
+}
+.pf-title {
+  color: var(--gallery-ink);
+  font-family: var(--gallery-serif);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+main .pf-more {
+  font-family: var(--gallery-sans);
+  color: var(--gallery-gold);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .06em;
+}
+.tm-dots span.on, .home-hero-image .tm-dots span.on { background: var(--gallery-gold); }
+.footer.tm-minimal-footer .follow h2,
+.footer.tm-minimal-footer .subscribe h3 {
+  color: var(--gallery-gold);
+  font-family: var(--gallery-sans);
+  font-weight: 600;
+  letter-spacing: .045em;
+}
+.footer.tm-minimal-footer .copyright,
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedContent p {
+  color: var(--gallery-muted);
+}
+.footer.tm-minimal-footer .tm-social { color: var(--gallery-ink); }
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary {
+  background: var(--gallery-gold) !important;
+  border-color: var(--gallery-gold) !important;
+  color: #fffdf7 !important;
+  font-family: var(--gallery-sans) !important;
+  letter-spacing: .045em !important;
+}
+.footer.tm-minimal-footer .subscribe #mlb2-48877838 .ml-form-embedSubmit button.primary:hover {
+  background: #9d752b !important;
+  border-color: #9d752b !important;
+}
+/* HOME ONLY — half-height banner and smaller curated image sizes */
+.home-page { width: 960px; max-width: 95%; }
+.home-page .home-hero { margin-top: 17px; margin-bottom: 42px; }
+.home-page .home-hero-image {
+  height: clamp(140px, 15.5vw, 170px);
+  aspect-ratio: auto;
+  overflow: visible;
+}
+.home-page .home-bio {
+  margin: 0 auto 70px;
+  max-width: 850px;
+}
+.home-page .home-bio-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(28px, 4.5vw, 62px);
+}
+.home-page .home-bio-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+}
+.home-page .home-bio-text {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.home-page .home-bio-text p { min-height: 0; margin-bottom: 11px; }
+.home-page .home-bio-text p:empty { display: none; }
+.home-page .home-portfolio { margin-bottom: 62px; }
+.home-page .home-portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 185px));
+  justify-content: center;
+  gap: 24px;
+}
+.home-page .home-portfolio-item { aspect-ratio: 3/4; }
+.home-page .portfolio-button { margin: 30px auto 0; }
+/* Mobile stays usable. Keep photos meaningful rather than reducing below readability. */
+@media (max-width: 700px) {
+  .header { border-bottom: 1px solid var(--gallery-rule); }
+  .header .navigation a { letter-spacing: .015em; }
+  .home-page .home-hero { margin-top: 13px; margin-bottom: 34px; }
+  .home-page .home-hero-image { height: clamp(128px, 35vw, 165px); }
+  .home-page h2 { font-size: 34px; margin-bottom: 23px; }
+  .home-page .home-bio { max-width: 510px; margin-bottom: 51px; }
+  .home-page .home-bio-layout {
+    grid-template-columns: minmax(0,1fr);
+    justify-items: center;
+    gap: 22px;
+  }
+  .home-page .home-bio-image { width: min(230px, 66vw); }
+  .home-page .home-bio-text { font-size: 14px; width: 100%; }
+  .home-page .home-portfolio-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .home-page .portfolio-button { margin-top: 22px; }
+  .about-page h2 { font-size: 28px; }
+}
+@media (max-width: 390px) {
+  .home-page .home-bio-image { width: min(210px, 66vw); }
+  .home-page .home-portfolio-grid { gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-button, .contact-button, .about-cv-download { transition: none; }
 }
