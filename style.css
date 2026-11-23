@@ -2149,7 +2149,7 @@ main .pf-more {
   gap: 20px;
   width: 100%;
   font-family: var(--gallery-serif, Georgia, serif);
-  font-size: clamp(34px,4vw,46px);
+  font-size: clamp(23px,2.7vw,31px);
   font-weight: 500;
   letter-spacing: .05em;
   line-height: 1.15;
@@ -2185,7 +2185,7 @@ main .pf-more {
     height: clamp(125px, 33vw, 160px);
     min-height: 125px;
   }
-  .home-page .home-bio > h2, .home-page .home-portfolio > h2 { gap: 12px; font-size: 34px; }
+  .home-page .home-bio > h2, .home-page .home-portfolio > h2 { gap: 12px; font-size: 23px; }
   .home-page .home-hero-image .tm-nav { opacity: .75; width: 24px; }
 }
 @media (max-width: 390px) {
@@ -2193,7 +2193,7 @@ main .pf-more {
   .header .navigation a, .header .navigation .dd > a { font-size: 10px; }
   .header .tm-brand-name { font-size: 20px; }
   .header .tm-brand-subtitle { font-size: 7.4px; }
-  .home-page .home-bio > h2, .home-page .home-portfolio > h2 { font-size: 30px; }
+  .home-page .home-bio > h2, .home-page .home-portfolio > h2 { font-size: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-page .home-hero-image .tm-slide { transition: none !important; }
