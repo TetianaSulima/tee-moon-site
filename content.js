@@ -76,102 +76,85 @@
     brand.append(name, desc);
     logo.after(brand);
   }
+  // One complete image per banner. The artist can prepare a collage externally
+  // and upload it as one JPG/PNG. Retain the existing slideshow when several
+  // separate banner images are configured.
   function hero() {
     const host = document.querySelector('.home-hero-image');
     if (!host) return;
-    // A collage is one curated project/series, containing ideally 5–7 photographs.
-    // Legacy home.banners becomes ONE sample collage until edited in the studio.
-    const configured = Array.isArray(D['home.collages']) ? D['home.collages'] : null;
-    const legacy = Array.isArray(D['home.banners']) ? D['home.banners'] :
-      (D['home.hero'] ? [D['home.hero']] : []);
-    const groups = (configured === null ? [legacy] : configured)
-      .filter(Array.isArray)
-      .map(photos => photos.filter(src => typeof src === 'string' && src.trim()))
-      .filter(photos => photos.length);
-    if (!groups.length) return;
-
+    const previousGroups = Array.isArray(D['home.collages'])
+      ? D['home.collages'].filter(Array.isArray).map(group => group.find(src => typeof src === 'string' && src.trim())).filter(Boolean)
+      : [];
+    const sources = Array.isArray(D['home.banners']) ? D['home.banners']
+      : (D['home.hero'] ? [D['home.hero']] : previousGroups);
+    const photos = sources.filter(src => typeof src === 'string' && src.trim());
+    if (!photos.length) return;
+    host.classList.remove('tm-collage-host');
+    host.classList.add('tm-slider');
     host.style.background = 'none';
-    host.classList.add('tm-collage-host');
     host.replaceChildren();
-    const stage = document.createElement('div');
-    stage.className = 'tm-collage-stage';
-    stage.setAttribute('role', 'group');
-    stage.setAttribute('aria-label', 'Selected photographic projects');
-    host.append(stage);
-    const frames = groups.map((photos, idx) => {
-      const frame = document.createElement('div');
-      frame.className = 'tm-project-collage' + (idx === 0 ? ' on' : '');
-      frame.style.setProperty('--tm-tile-count', String(photos.length));
-      frame.setAttribute('aria-hidden', String(idx !== 0));
-      photos.forEach((url, imageIdx) => {
-        const tile = document.createElement('div');
-        tile.className = 'tm-collage-tile';
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = `Artwork ${imageIdx + 1} of project ${idx + 1}`;
-        img.loading = idx === 0 ? 'eager' : 'lazy';
-        if (idx === 0) img.fetchPriority = 'high';
-        tile.append(img);
-        frame.append(tile);
-      });
-      stage.append(frame);
-      return frame;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'tm-wrap';
+    const slides = photos.map((url, index) => {
+      const slide = document.createElement('div');
+      slide.className = 'tm-slide' + (index ? '' : ' on');
+      slide.style.backgroundImage = 'url(' + JSON.stringify(url) + ')';
+      wrapper.append(slide);
+      return slide;
     });
-    if (frames.length < 2) return; // One project is a complete banner, without fake slideshow controls.
-
+    host.append(wrapper);
+    if (slides.length === 1) return;
     const prev = document.createElement('button');
     const next = document.createElement('button');
     prev.type = next.type = 'button';
-    prev.className = 'tm-collage-arrow tm-collage-prev';
-    next.className = 'tm-collage-arrow tm-collage-next';
+    prev.className = 'tm-nav tm-prev'; next.className = 'tm-nav tm-next';
     prev.textContent = '‹'; next.textContent = '›';
-    prev.setAttribute('aria-label', 'Previous project');
-    next.setAttribute('aria-label', 'Next project');
+    prev.setAttribute('aria-label', 'Previous banner');
+    next.setAttribute('aria-label', 'Next banner');
     const dots = document.createElement('div');
-    dots.className = 'tm-collage-dots';
-    dots.setAttribute('aria-label', 'Choose project');
-    const buttons = frames.map((_, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('aria-label', `Project ${idx + 1}`);
-      b.setAttribute('aria-current', String(idx === 0));
-      dots.append(b);
-      return b;
+    dots.className = 'tm-dots';
+    const indicators = slides.map((_, index) => {
+      const dot = document.createElement('span');
+      if (!index) dot.className = 'on';
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('tabindex', '0');
+      dot.setAttribute('aria-label', `Banner ${index + 1}`);
+      dots.append(dot);
+      return dot;
     });
     host.append(prev, next, dots);
-
-    let selected = 0;
-    const show = idx => {
-      selected = (idx + frames.length) % frames.length;
-      frames.forEach((f, n) => {
-        f.classList.toggle('on', n === selected);
-        f.setAttribute('aria-hidden', String(n !== selected));
-      });
-      buttons.forEach((b, n) => b.setAttribute('aria-current', String(n === selected)));
+    let current = 0, timer = null;
+    const show = index => {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle('on', i === current));
+      indicators.forEach((dot, i) => dot.classList.toggle('on', i === current));
     };
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let timer = null;
-    const stop = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
+    const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
     const play = () => {
       stop();
-      if (!reduced && !document.hidden) timer = window.setInterval(() => show(selected + 1), 6500);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && !document.hidden) {
+        timer = window.setInterval(() => show(current + 1), 5500);
+      }
     };
-    prev.addEventListener('click', () => { show(selected - 1); play(); });
-    next.addEventListener('click', () => { show(selected + 1); play(); });
-    buttons.forEach((b, n) => b.addEventListener('click', () => { show(n); play(); }));
+    prev.onclick = () => { show(current - 1); play(); };
+    next.onclick = () => { show(current + 1); play(); };
+    indicators.forEach((dot, i) => {
+      dot.onclick = () => { show(i); play(); };
+      dot.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(i); play(); } };
+    });
     host.addEventListener('mouseenter', stop);
     host.addEventListener('mouseleave', play);
     host.addEventListener('focusin', stop);
     host.addEventListener('focusout', e => { if (!host.contains(e.relatedTarget)) play(); });
     document.addEventListener('visibilitychange', () => document.hidden ? stop() : play());
     let x0 = null;
-    host.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive:true });
+    host.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
     host.addEventListener('touchend', e => {
       if (x0 === null) return;
       const diff = e.changedTouches[0].clientX - x0;
-      if (Math.abs(diff) > 35) { show(selected + (diff < 0 ? 1 : -1)); play(); }
+      if (Math.abs(diff) > 40) { show(current + (diff < 0 ? 1 : -1)); play(); }
       x0 = null;
-    }, { passive:true });
+    }, { passive: true });
     play();
   }
 

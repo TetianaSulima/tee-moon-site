@@ -2043,7 +2043,7 @@ main .pf-more {
 
 
 /* ======================================================================
-   TEE MOON — COMPACT ARTIST MASTHEAD + CURATED PROJECT COLLAGE
+   TEE MOON — COMPACT ARTIST MASTHEAD + SINGLE IMAGE BANNERS
    2026-11-23. Always sits AFTER the existing Contemporary Gallery theme.
    ====================================================================== */
 .header {
@@ -2119,100 +2119,27 @@ main .pf-more {
 }
 .header .language-switch { flex-shrink: 0; gap: 5px; }
 .header .language-switch img { width: 18px; height: 12px; object-fit: cover; }
-/* Keep the exact long, narrow banner, now as a grid of photographs. */
+/* Keep the narrow horizontal banner. Each slide is ONE image. */
 .home-page .home-hero { margin-top: 17px; margin-bottom: 49px; }
-.home-page .home-hero-image,
-.home-page .home-hero-image.tm-collage-host {
+.home-page .home-hero-image {
   width: 100%;
-  height: clamp(140px,15.5vw,170px);
+  height: clamp(140px, 15.5vw, 170px);
   min-height: 140px;
   aspect-ratio: auto;
   position: relative;
   overflow: visible;
-  background: transparent;
+  background-color: #e9e3d8;
 }
-.tm-collage-stage, .tm-admin-stage {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  background: #e9e3d8;
-}
-.tm-project-collage {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  gap: 5px;
-  min-width: 0;
-  overflow: hidden;
-}
-.tm-collage-stage > .tm-project-collage {
-  opacity: 0;
-  transition: opacity 1s ease;
-  pointer-events: none;
-}
-.tm-collage-stage > .tm-project-collage.on {
-  opacity: 1;
-  z-index: 1;
-  pointer-events: auto;
-}
-.tm-project-collage .tm-collage-tile {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  background: #e8dfd2;
-}
-.tm-project-collage .tm-collage-tile:first-child,
-.tm-project-collage .tm-collage-tile:last-child { flex-grow: 1.18; }
-.tm-project-collage .tm-collage-tile:nth-child(2n) { flex-grow: .87; }
-.tm-project-collage .tm-collage-tile img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  transition: transform 6.5s ease-out;
-}
-/* Motion is deliberately restrained and limited to active project. */
-.tm-collage-stage > .tm-project-collage.on img { transform: scale(1.025); }
-.tm-collage-dots {
-  position: absolute;
-  top: calc(100% + 12px);
-  left: 0; right: 0;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  gap: 9px;
-}
-.tm-collage-dots button {
-  border: 0;
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: #d2c8b8;
-  padding: 0;
-  cursor: pointer;
-}
-.tm-collage-dots button[aria-current="true"] { background: var(--gallery-gold, #b38a35); }
-.tm-collage-arrow {
-  position: absolute;
-  z-index: 4;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 29px;
-  height: 43px;
-  border: 0;
+.home-page .home-hero-image .tm-wrap { border-radius: 0; }
+.home-page .home-hero-image .tm-slide { background-position: center; background-size: cover; }
+.home-page .home-hero-image .tm-dots span.on { background: var(--gallery-gold, #b38a35); }
+.home-page .home-hero-image .tm-nav {
   background: rgba(250,248,242,.85);
   color: var(--gallery-ink, #473c32);
-  font-family: Georgia, serif;
+  width: 30px;
+  height: 43px;
   font-size: 23px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .18s;
 }
-.tm-collage-prev { left: 0; }
-.tm-collage-next { right: 0; }
-.tm-collage-host:hover .tm-collage-arrow,
-.tm-collage-arrow:focus-visible { opacity: 1; }
 /* Long gold hairlines BESIDE ABOUT and PORTFOLIO headings. */
 .home-page .home-bio > h2,
 .home-page .home-portfolio > h2 {
@@ -2254,14 +2181,12 @@ main .pf-more {
   .header .navigation { gap: 11px 15px; }
   .header .navigation a, .header .navigation .dd > a { font-size: 11px; }
   .home-page .home-hero { margin-top: 13px; margin-bottom: 38px; }
-  .home-page .home-hero-image, .home-page .home-hero-image.tm-collage-host {
+  .home-page .home-hero-image {
     height: clamp(125px, 33vw, 160px);
     min-height: 125px;
   }
-  .tm-project-collage { gap: 3px; }
-  .tm-project-collage .tm-collage-tile:nth-child(n + 5) { display: none; }
   .home-page .home-bio > h2, .home-page .home-portfolio > h2 { gap: 12px; font-size: 34px; }
-  .tm-collage-arrow { opacity: .75; width: 24px; }
+  .home-page .home-hero-image .tm-nav { opacity: .75; width: 24px; }
 }
 @media (max-width: 390px) {
   .header .navigation { gap: 9px 12px; }
@@ -2271,7 +2196,5 @@ main .pf-more {
   .home-page .home-bio > h2, .home-page .home-portfolio > h2 { font-size: 30px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tm-collage-stage > .tm-project-collage,
-  .tm-project-collage .tm-collage-tile img,
-  .tm-collage-arrow { transition: none !important; transform: none !important; }
+  .home-page .home-hero-image .tm-slide { transition: none !important; }
 }

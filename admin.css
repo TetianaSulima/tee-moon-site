@@ -50,38 +50,14 @@ main a{cursor:default}
 .inbox-page button:hover{background:#000;color:#fff}
 
 
-/* Project collage editor, matches website strip and supports group uploads. */
-.tm-admin-collage { background: #eee8dd !important; cursor: default; }
-.tm-admin-collage::after,
-.tm-admin-collage.has::after,
-.tm-admin-collage.has:hover::after { content: none !important; display: none !important; }
-.tm-admin-collage .tm-admin-stage { position: absolute; inset: 0; }
-.tm-admin-collage .tm-admin-grid { opacity: 1; }
-.tm-admin-collage .tm-admin-caption {
-  position: absolute; z-index: 8; bottom: 8px; left: 50%; transform: translateX(-50%);
-  background: rgba(250,248,242,.92); color: #473c32;
-  font-size: 10px; letter-spacing: .05em; padding: 4px 8px; white-space: nowrap;
-}
-.tm-admin-collage .bn-tools {
-  position: absolute; z-index: 8; top: 6px; left: 6px; right: 6px;
-  display: flex; flex-wrap: wrap; gap: 5px;
-}
-.tm-admin-collage .bn-tools .bn {
+
+/* Simple one-image-per-slide banner controls. */
+.banner .bn-tools { flex-wrap: wrap; }
+.banner .bn-tools .bn {
   background: rgba(250,248,242,.96); color: #473c32;
-  border: 1px solid #b38a35;
-  padding: 6px 8px; font-size: 10px;
+  border: 1px solid #b38a35; padding: 7px 10px;
 }
-.tm-admin-collage .bn-tools .bn:hover { background: #b38a35; color: white; }
-.tm-admin-collage .bn-prev,
-.tm-admin-collage .bn-next { background: rgba(250,248,242,.9); color: #473c32; }
-.tm-admin-collage .bn-dots { bottom: -21px; }
-.tm-admin-collage .bn-dots button {
-  width: 9px; height: 9px; border: 0; border-radius: 50%;
-  background: #d6c8ad; padding: 0; cursor: pointer;
-}
-.tm-admin-collage .bn-dots button.on { background: #b38a35; }
-.tm-admin-collage .bn[hidden] { display: none !important; }
-@media(max-width:700px) {
-  .tm-admin-collage .bn-tools .bn { padding: 5px 6px; font-size: 9px; }
-  .tm-admin-collage .tm-admin-caption { font-size: 9px; }
-}
+.banner .bn-tools .bn:hover { background: #b38a35; color: #fff; }
+.banner .bn[hidden] { display: none !important; }
+.banner .bn-dots span.on { background: #b38a35; }
+@media(max-width:700px) { .banner .bn-tools .bn { font-size: 10px; padding: 5px 7px; } }

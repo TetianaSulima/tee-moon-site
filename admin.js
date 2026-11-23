@@ -199,105 +199,73 @@
   }
 
 
-  // Each slide is a whole project. Existing 5 legacy images remain as a
-  // temporary sample collage; the editor can replace them as one project.
-  const collages = () => {
+  // Exactly one finished JPG/PNG per banner. Individual banners can rotate.
+  const banners = () => {
+    if (Array.isArray(D['home.banners'])) return D['home.banners'].filter(v => typeof v === 'string' && v);
+    if (D['home.hero']) return [D['home.hero']];
+    // Non-destructive fallback if the previous collage-only version was published.
     if (Array.isArray(D['home.collages'])) return D['home.collages']
-      .filter(Array.isArray).map(group => group.filter(v => typeof v === 'string' && v));
-    const old = Array.isArray(D['home.banners']) ? D['home.banners'] :
-      (D['home.hero'] ? [D['home.hero']] : []);
-    return old.length ? [old.slice()] : [];
+      .filter(Array.isArray).map(group => group.find(v => typeof v === 'string' && v)).filter(Boolean);
+    return [];
   };
   function bindBanner(el) {
-    let current = 0;
-    el.classList.add('slot-img', 'banner', 'tm-admin-collage');
-    el.style.background = 'none';
-    el.innerHTML = `<div class="tm-admin-stage"></div>
-      <button type="button" class="bn bn-prev" aria-label="Предыдущая серия">‹</button>
-      <button type="button" class="bn bn-next" aria-label="Следующая серия">›</button>
-      <div class="bn-dots" aria-label="Коллажи проектов"></div>
-      <div class="tm-admin-caption" aria-live="polite"></div>
-      <div class="bn-tools">
-        <button type="button" class="bn bn-add">+ НОВЫЙ ПРОЕКТ (5–7 ФОТО)</button>
-        <button type="button" class="bn bn-replace">ЗАМЕНИТЬ ФОТО</button>
-        <button type="button" class="bn bn-del">✕ УДАЛИТЬ ПРОЕКТ</button>
-      </div>`;
-    const q = sel => el.querySelector(sel);
-    const set = updated => {
-      // No destructive migration: the older home.banners value is preserved.
-      D['home.collages'] = updated;
-      queue();
-      draw();
+    let i = 0;
+    el.classList.add('slot-img', 'banner');
+    el.innerHTML = `<button type="button" class="bn bn-prev" aria-label="Предыдущий баннер">‹</button>
+      <button type="button" class="bn bn-next" aria-label="Следующий баннер">›</button>
+      <div class="bn-dots"></div><div class="bn-tools">
+      <button type="button" class="bn bn-replace">ЗАМЕНИТЬ КАРТИНКУ</button>
+      <button type="button" class="bn bn-add">+ ДОБАВИТЬ БАННЕР</button>
+      <button type="button" class="bn bn-del">✕ УДАЛИТЬ БАННЕР</button></div>`;
+    const q = selector => el.querySelector(selector);
+    const set = arr => {
+      D['home.banners'] = arr;
+      delete D['home.hero'];
+      // Keep obsolete home.collages as historical data, but never display it.
+      queue(); draw();
     };
     function draw() {
-      const all = collages();
-      current = Math.max(0, Math.min(current, all.length - 1));
-      const frame = q('.tm-admin-stage');
-      frame.replaceChildren();
-      const list = all[current] || [];
-      const grid = document.createElement('div');
-      grid.className = 'tm-admin-grid tm-project-collage';
-      grid.style.setProperty('--tm-tile-count', String(list.length));
-      list.forEach((src, idx) => {
-        const tile = document.createElement('div');
-        tile.className = 'tm-collage-tile';
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = `Фото ${idx + 1}`;
-        tile.append(img);
-        grid.append(tile);
+      const arr = banners();
+      i = arr.length ? Math.max(0, Math.min(i, arr.length - 1)) : 0;
+      const url = arr[i];
+      el.style.background = url ? ('url(' + JSON.stringify(url) + ') center / cover no-repeat') : '';
+      el.classList.toggle('has', !!url);
+      q('.bn-prev').hidden = q('.bn-next').hidden = arr.length < 2;
+      q('.bn-del').hidden = q('.bn-replace').hidden = arr.length === 0;
+      const dots = q('.bn-dots');
+      dots.replaceChildren();
+      arr.forEach((_, n) => {
+        const dot = document.createElement('span');
+        if (n === i) dot.className = 'on';
+        dot.title = `Баннер ${n + 1}`;
+        dot.onclick = e => { e.stopPropagation(); i = n; draw(); };
+        dots.append(dot);
       });
-      frame.append(grid);
-      q('.tm-admin-caption').textContent = all.length
-        ? `КОЛЛАЖ ${current + 1} / ${all.length} · ${list.length} ФОТО · ОДИН ПРОЕКТ`
-        : 'ДОБАВЬТЕ 5–7 ФОТОГРАФИЙ ОДНОЙ СЕРИИ';
-      q('.bn-dots').replaceChildren();
-      all.forEach((_, idx) => {
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = idx === current ? 'on' : '';
-        b.title = `Проект ${idx + 1}`;
-        b.setAttribute('aria-label', `Проект ${idx + 1}`);
-        b.onclick = () => { current = idx; draw(); };
-        q('.bn-dots').append(b);
-      });
-      q('.bn-prev').hidden = q('.bn-next').hidden = all.length < 2;
-      q('.bn-replace').hidden = q('.bn-del').hidden = all.length === 0;
-      el.classList.toggle('has', all.length > 0);
     }
-    function choosePhotos(mode) {
-      imgInput.multiple = true;
-      imgInput.onchange = async () => {
-        const files = [...imgInput.files];
-        imgInput.value = ''; imgInput.multiple = false;
-        if (!files.length) return;
-        if (files.length < 5 || files.length > 7) {
-          alert('Для одного коллажа выберите от 5 до 7 фотографий одной серии.');
-          return;
-        }
-        const newPhotos = [];
-        for (const file of files) {
-          await new Promise(resolve => readImg(file, url => { newPhotos.push(url); resolve(); }, 1600));
-        }
-        const updated = collages().slice();
-        if (mode === 'replace' && updated.length) updated[current] = newPhotos;
-        else { updated.push(newPhotos); current = updated.length - 1; }
-        set(updated);
+    function selectImage(replace) {
+      imgInput.multiple = false;
+      imgInput.onchange = () => {
+        const file = imgInput.files[0];
+        imgInput.value = '';
+        if (!file) return;
+        readImg(file, url => {
+          const arr = banners().slice();
+          if (replace && arr.length) arr[i] = url;
+          else { arr.push(url); i = arr.length - 1; }
+          set(arr);
+        }, 1800);
       };
       imgInput.click();
     }
-    q('.bn-add').onclick = e => { e.stopPropagation(); choosePhotos('add'); };
-    q('.bn-replace').onclick = e => { e.stopPropagation(); choosePhotos('replace'); };
+    q('.bn-add').onclick = e => { e.stopPropagation(); selectImage(false); };
+    q('.bn-replace').onclick = e => { e.stopPropagation(); selectImage(true); };
     q('.bn-del').onclick = e => {
       e.stopPropagation();
-      if (!confirm('Удалить этот коллаж? Другие проекты останутся.')) return;
-      const updated = collages().slice();
-      updated.splice(current, 1);
-      current = Math.max(0, current - 1);
-      set(updated);
+      const arr = banners().slice(); arr.splice(i, 1); set(arr);
     };
-    q('.bn-prev').onclick = e => { e.stopPropagation(); const n = collages().length; if (n) { current = (current - 1 + n) % n; draw(); } };
-    q('.bn-next').onclick = e => { e.stopPropagation(); const n = collages().length; if (n) { current = (current + 1) % n; draw(); } };
+    q('.bn-prev').onclick = e => { e.stopPropagation(); const n = banners().length; if (n) { i = (i - 1 + n) % n; draw(); } };
+    q('.bn-next').onclick = e => { e.stopPropagation(); const n = banners().length; if (n) { i = (i + 1) % n; draw(); } };
+    el.onclick = e => { if (e.target === el && !banners().length) selectImage(false); };
     draw();
   }
 
